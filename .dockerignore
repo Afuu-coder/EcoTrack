@@ -1,0 +1,10 @@
+# Exclude build artifacts and local deps — Cloud Build does a fresh npm ci
+node_modules
+dist
+.env.local
+.env.*.local
+*.log
+.DS_Store
+.git
+.gitignore
+coverage
