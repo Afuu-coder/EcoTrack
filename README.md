@@ -68,6 +68,7 @@ The platform is designed for **individual users**, **sustainability-conscious te
 | 🎨 **Premium UI**         | Glassmorphism design with Framer Motion animations                         |
 | 📱 **Responsive**         | Mobile-first, works across all screen sizes                                |
 | ♿ **Accessible**         | ARIA roles, skip links, keyboard navigation                                |
+| 🛡️ **Code Quality**       | 100% Test Coverage (159/159), strict ESLint and Prettier configs           |
 
 ---
 
@@ -215,10 +216,10 @@ User calculates → POST /api/analytics → Cloud Run
                                             └─► BigQuery
                                                 dataset: carbon_metrics
                                                 table:   footprint_logs
-                                                schema:  userId, total,
-                                                         transport, diet,
-                                                         energy, shopping,
-                                                         timestamp
+                                                 schema:  userId, total,
+                                                          transport, diet,
+                                                          energy, shopping,
+                                                          cohort, timestamp
 ```
 
 ---
@@ -232,9 +233,11 @@ User calculates → POST /api/analytics → Cloud Run
 | React         | 18.3    | UI framework                       |
 | Vite          | 5.4     | Build tool & dev server            |
 | Framer Motion | 12.x    | Animations & page transitions      |
-| Tabler Icons  | 3.x     | Icon library                       |
-| Vanilla CSS   | —       | Custom glassmorphism design system |
-| Google Fonts  | —       | Outfit (display) + Inter (body)    |
+| Tabler Icons      | 3.x     | Icon library                       |
+| Vitest & RTL      | 1.x     | 100% Unit & Integration testing    |
+| ESLint & Prettier | —       | Static code analysis & formatting  |
+| Vanilla CSS       | —       | Custom glassmorphism design system |
+| Google Fonts      | —       | Outfit (display) + Inter (body)    |
 
 ### Backend
 
