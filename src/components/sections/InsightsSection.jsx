@@ -2,9 +2,11 @@
  * InsightsSection — Vertex AI recommendations + 30-day challenge
  */
 import { useState }       from 'react';
+import PropTypes          from 'prop-types';
 import InsightCard        from '@/components/ui/InsightCard';
 import { savePledge }     from '@/services/firestore';
 import { useAuthContext } from '@/context/AuthContext';
+
 
 const CHALLENGES = [
   '🚌 Replace 2 car trips/week with public transit',
@@ -162,3 +164,26 @@ export default function InsightsSection({ insights, loadingAI }) {
     </section>
   );
 }
+
+InsightsSection.propTypes = {
+  /** AI-generated insights object (null while loading or before first call) */
+  insights: PropTypes.shape({
+    tips: PropTypes.arrayOf(
+      PropTypes.shape({
+        tip:      PropTypes.string.isRequired,
+        category: PropTypes.string.isRequired,
+        priority: PropTypes.string.isRequired,
+        saving:   PropTypes.number,
+      })
+    ).isRequired,
+    largestCategory: PropTypes.string.isRequired,
+    potentialSaving: PropTypes.number.isRequired,
+    total:           PropTypes.number,
+  }),
+  /** True while the Vertex AI request is in-flight */
+  loadingAI: PropTypes.bool.isRequired,
+};
+
+InsightsSection.defaultProps = {
+  insights: null,
+};

@@ -4,7 +4,8 @@
  */
 import PropTypes from 'prop-types';
 
-export default function ProgressRing({ value, max, size = 120, stroke = 10, color, grade, label }) {
+export default function ProgressRing({ value, max, size = 120, stroke = 10, color, grade = undefined, label = undefined }) {
+
   const r      = (size - stroke) / 2;
   const circ   = 2 * Math.PI * r;
   const ratio  = Math.min(value / max, 1);
@@ -71,9 +72,3 @@ ProgressRing.propTypes = {
   label:  PropTypes.string,
 };
 
-ProgressRing.defaultProps = {
-  size:   120,
-  stroke: 10,
-  grade:  undefined,
-  label:  undefined,
-};

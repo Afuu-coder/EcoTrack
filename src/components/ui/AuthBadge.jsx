@@ -1,4 +1,6 @@
 import { motion } from 'framer-motion';
+import PropTypes  from 'prop-types';
+
 
 export default function AuthBadge({ authLoading, isAuthenticated, user }) {
   if (authLoading) {
@@ -38,3 +40,21 @@ export default function AuthBadge({ authLoading, isAuthenticated, user }) {
 
   return null;
 }
+
+AuthBadge.propTypes = {
+  /** True while Firebase auth state is loading */
+  authLoading:     PropTypes.bool.isRequired,
+  /** True when a user is signed in */
+  isAuthenticated: PropTypes.bool.isRequired,
+  /** Firebase user object (null when signed out) */
+  user: PropTypes.shape({
+    displayName: PropTypes.string,
+    photoURL:    PropTypes.string,
+    email:       PropTypes.string,
+  }),
+};
+
+AuthBadge.defaultProps = {
+  user: null,
+};
+

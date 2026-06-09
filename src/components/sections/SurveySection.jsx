@@ -13,8 +13,10 @@
  * @param {function(): Promise<void>} props.onCalculate          - Calculate & save handler
  * @param {boolean}                   props.isSaving             - True while Firestore save is in progress
  */
+import PropTypes   from 'prop-types';
 import InputField  from '@/components/ui/InputField';
 import SelectField from '@/components/ui/SelectField';
+
 
 export default function SurveySection({
   transport, setTransport,
@@ -130,3 +132,37 @@ export default function SurveySection({
     </section>
   );
 }
+
+SurveySection.propTypes = {
+  /** Transport state object */
+  transport:    PropTypes.shape({
+    kmCar:       PropTypes.number,
+    kmBus:       PropTypes.number,
+    kmTrain:     PropTypes.number,
+    flightHours: PropTypes.number,
+  }).isRequired,
+  /** Transport state setter */
+  setTransport: PropTypes.func.isRequired,
+  /** Diet state object */
+  diet:         PropTypes.shape({ dietType: PropTypes.string }).isRequired,
+  /** Diet state setter */
+  setDiet:      PropTypes.func.isRequired,
+  /** Energy state object */
+  energy:       PropTypes.shape({
+    kwhHome:      PropTypes.number,
+    energySource: PropTypes.string,
+  }).isRequired,
+  /** Energy state setter */
+  setEnergy:    PropTypes.func.isRequired,
+  /** Shopping state object */
+  shopping:     PropTypes.shape({
+    clothingItems:    PropTypes.number,
+    electronicsItems: PropTypes.number,
+  }).isRequired,
+  /** Shopping state setter */
+  setShopping:  PropTypes.func.isRequired,
+  /** Called when user clicks Calculate */
+  onCalculate:  PropTypes.func.isRequired,
+  /** True while save is in-progress */
+  isSaving:     PropTypes.bool.isRequired,
+};

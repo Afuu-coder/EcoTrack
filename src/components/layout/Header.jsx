@@ -1,7 +1,9 @@
 import { motion } from 'framer-motion';
+import PropTypes from 'prop-types';
 import { IconLeaf, IconLogout } from '@tabler/icons-react';
 import AuthBadge from '@/components/ui/AuthBadge';
 import { useAuthContext } from '@/context/AuthContext';
+
 
 export default function Header({ onLogoClick }) {
   const { authLoading, authMode, isAuthenticated, user, loginWithGoogle, logout } = useAuthContext();
@@ -69,3 +71,13 @@ export default function Header({ onLogoClick }) {
     </header>
   );
 }
+
+Header.propTypes = {
+  /** Optional click handler for the logo / app name */
+  onLogoClick: PropTypes.func,
+};
+
+Header.defaultProps = {
+  onLogoClick: undefined,
+};
+

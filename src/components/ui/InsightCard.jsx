@@ -2,10 +2,14 @@
  * InsightCard — AI recommendation card with priority colour coding
  * @param {{ tip, category, priority, saving }} props
  */
+import PropTypes from 'prop-types';
+
 const PRIORITY_COLORS = { high: '#f97316', medium: '#facc15', low: '#34d399' };
 const CAT_ICONS = { transport: '🚗', diet: '🥗', energy: '⚡', shopping: '🛍️' };
 
-export default function InsightCard({ tip, category, priority, saving }) {
+
+export default function InsightCard({ tip, category, priority, saving = null }) {
+
   const borderColor = PRIORITY_COLORS[priority] || PRIORITY_COLORS.low;
   const icon = CAT_ICONS[category] || '💡';
 
@@ -48,3 +52,15 @@ export default function InsightCard({ tip, category, priority, saving }) {
     </div>
   );
 }
+
+InsightCard.propTypes = {
+  /** The recommendation text */
+  tip:      PropTypes.string.isRequired,
+  /** Emission category key: 'transport' | 'diet' | 'energy' | 'shopping' */
+  category: PropTypes.string.isRequired,
+  /** Priority level: 'high' | 'medium' | 'low' */
+  priority: PropTypes.string.isRequired,
+  /** Estimated CO₂e saving in kg/month (optional) */
+  saving:   PropTypes.number,
+};
+

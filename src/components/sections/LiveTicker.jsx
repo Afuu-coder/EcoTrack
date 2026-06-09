@@ -1,8 +1,10 @@
 /**
  * LiveTicker — always-visible live CO₂ counter with grade ring
  */
+import PropTypes  from 'prop-types';
 import ProgressRing from '@/components/ui/ProgressRing';
 import { MONTHLY_AVERAGE_KG } from '@/constants/emissions';
+
 
 export default function LiveTicker({ total, gradeInfo }) {
   const hasData = total > 0;
@@ -46,3 +48,15 @@ export default function LiveTicker({ total, gradeInfo }) {
     </div>
   );
 }
+
+LiveTicker.propTypes = {
+  /** Current monthly total in kg */
+  total:     PropTypes.number.isRequired,
+  /** Grade metadata from gradeFootprint() */
+  gradeInfo: PropTypes.shape({
+    grade: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+    color: PropTypes.string.isRequired,
+    emoji: PropTypes.string.isRequired,
+  }).isRequired,
+};
