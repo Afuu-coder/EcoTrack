@@ -2,6 +2,8 @@
  * ProgressRing — animated SVG ring for grade display
  * @param {{ value, max, size, stroke, color, grade, label }} props
  */
+import PropTypes from 'prop-types';
+
 export default function ProgressRing({ value, max, size = 120, stroke = 10, color, grade, label }) {
   const r      = (size - stroke) / 2;
   const circ   = 2 * Math.PI * r;
@@ -51,3 +53,27 @@ export default function ProgressRing({ value, max, size = 120, stroke = 10, colo
     </div>
   );
 }
+
+ProgressRing.propTypes = {
+  /** Current value (numerator) */
+  value:  PropTypes.number.isRequired,
+  /** Maximum value (denominator) */
+  max:    PropTypes.number.isRequired,
+  /** Ring diameter in px */
+  size:   PropTypes.number,
+  /** Stroke width in px */
+  stroke: PropTypes.number,
+  /** Ring fill color (hex or CSS variable) */
+  color:  PropTypes.string.isRequired,
+  /** Grade letter displayed in center (e.g. "A") */
+  grade:  PropTypes.string,
+  /** Sub-label below grade */
+  label:  PropTypes.string,
+};
+
+ProgressRing.defaultProps = {
+  size:   120,
+  stroke: 10,
+  grade:  undefined,
+  label:  undefined,
+};

@@ -43,11 +43,14 @@ export async function getAIInsights(footprintData) {
  */
 function generateLocalInsights({ total, breakdown, inputs }) {
   const tips = [];
-  const { transport, diet, energy } = breakdown;
+  // Defensive: breakdown may be empty or missing in edge cases
+  const safeBreakdown = breakdown && typeof breakdown === 'object' ? breakdown : {};
+  const { transport = 0, diet = 0, energy = 0 } = safeBreakdown;
 
-  // Find biggest emission category
-  const sorted = Object.entries(breakdown).sort(([, a], [, b]) => b - a);
-  const largest = sorted[0][0];
+  // Find biggest emission category — fallback to 'energy' if breakdown is empty
+  const entries = Object.entries(safeBreakdown).filter(([, v]) => typeof v === 'number');
+  const sorted  = entries.sort(([, a], [, b]) => b - a);
+  const largest = sorted.length > 0 ? sorted[0][0] : 'energy';
 
   const tipMap = {
     transport: [

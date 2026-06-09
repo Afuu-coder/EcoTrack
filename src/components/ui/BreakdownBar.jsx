@@ -3,6 +3,7 @@
  * @param {{ label, kg, totalKg, color, icon }} props
  */
 import { motion } from 'framer-motion';
+import PropTypes from 'prop-types';
 
 export default function BreakdownBar({ label, kg, totalKg, color, icon }) {
   const pct = totalKg > 0 ? ((kg / totalKg) * 100).toFixed(1) : 0;
@@ -51,3 +52,16 @@ export default function BreakdownBar({ label, kg, totalKg, color, icon }) {
     </div>
   );
 }
+
+BreakdownBar.propTypes = {
+  /** Category label (e.g. "Transport") */
+  label:   PropTypes.string.isRequired,
+  /** CO₂e kg for this category */
+  kg:      PropTypes.number.isRequired,
+  /** Total monthly CO₂e kg (used to compute percentage) */
+  totalKg: PropTypes.number.isRequired,
+  /** CSS color string for the bar fill */
+  color:   PropTypes.string.isRequired,
+  /** Emoji icon for the category */
+  icon:    PropTypes.string.isRequired,
+};

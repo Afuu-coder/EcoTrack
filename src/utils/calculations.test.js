@@ -165,4 +165,113 @@ describe('formatNumber', () => {
   it('formats small numbers without commas', () => {
     expect(formatNumber(42)).toBe('42');
   });
+
+  it('formats zero correctly', () => {
+    expect(formatNumber(0)).toBe('0');
+  });
+});
+
+// ── vsParisTarget (was COMPLETELY untested!) ──────────────────
+
+import { vsParisTarget } from './calculations';
+
+describe('vsParisTarget', () => {
+  it('returns 0 at exactly the Paris target (208 kg)', () => {
+    expect(vsParisTarget(208)).toBe(0);
+  });
+
+  it('returns 100 at double the Paris target (416 kg)', () => {
+    expect(vsParisTarget(416)).toBe(100);
+  });
+
+  it('returns -50 at half the Paris target (104 kg)', () => {
+    expect(vsParisTarget(104)).toBe(-50);
+  });
+
+  it('returns a negative value when below Paris target (good!)', () => {
+    expect(vsParisTarget(100)).toBeLessThan(0);
+  });
+
+  it('returns a positive value when above Paris target (bad)', () => {
+    expect(vsParisTarget(500)).toBeGreaterThan(0);
+  });
+
+  it('returns an integer (Math.round applied)', () => {
+    expect(Number.isInteger(vsParisTarget(300))).toBe(true);
+    expect(Number.isInteger(vsParisTarget(123))).toBe(true);
+  });
+
+  it('handles zero total', () => {
+    // 0 kg → 100% below target → -100
+    expect(vsParisTarget(0)).toBe(-100);
+  });
+});
+
+// ── gradeFootprint: C and D grades (were untested!) ───────────
+
+describe('gradeFootprint — C and D grades', () => {
+  // C: > 312 and ≤ 583 (70% of 833)
+  it('grades C just above B threshold', () => {
+    expect(gradeFootprint(313).grade).toBe('C');
+  });
+
+  it('grades C at 70% of global average (583 kg)', () => {
+    expect(gradeFootprint(583).grade).toBe('C');
+  });
+
+  // D: > 583 and ≤ 833 (global average)
+  it('grades D just above C threshold', () => {
+    expect(gradeFootprint(584).grade).toBe('D');
+  });
+
+  it('grades D at exactly global average (833 kg)', () => {
+    expect(gradeFootprint(833).grade).toBe('D');
+  });
+
+  it('all grades return a label string', () => {
+    ['A','B','C','D','F'].forEach(expectedGrade => {
+      const testKg = { A: 100, B: 250, C: 500, D: 700, F: 1000 }[expectedGrade];
+      const { label } = gradeFootprint(testKg);
+      expect(typeof label).toBe('string');
+      expect(label.length).toBeGreaterThan(0);
+    });
+  });
+});
+
+// ── calculateBreakdown: electronics + flights (extended) ──────
+
+describe('calculateBreakdown — electronics and flights', () => {
+  it('electronics items contribute to shopping breakdown', () => {
+    const noElec = calculateBreakdown({ dietType: 'none', kwhHome: 0, electronicsItems: 0 });
+    const elec   = calculateBreakdown({ dietType: 'none', kwhHome: 0, electronicsItems: 2 });
+    // 2 devices × 70 kg ÷ 12 ≈ 11 kg
+    expect(elec.shopping).toBeGreaterThan(noElec.shopping);
+    expect(elec.shopping - noElec.shopping).toBeCloseTo(Math.round(2 * 70 / 12), 0);
+  });
+
+  it('flight hours contribute to transport breakdown', () => {
+    const noFlight = calculateBreakdown({ dietType: 'none', kwhHome: 0, flightHours: 0 });
+    const flight   = calculateBreakdown({ dietType: 'none', kwhHome: 0, flightHours: 6 });
+    // 6h × 800 km/h × 0.255 kg/km ÷ 12 months = 102 kg
+    expect(flight.transport - noFlight.transport).toBe(102);
+  });
+
+  it('energy: none source means zero energy emissions', () => {
+    const b = calculateBreakdown({ dietType: 'none', kwhHome: 500, energySource: 'none' });
+    expect(b.energy).toBe(0);
+  });
+
+  it('combined inputs produce non-zero breakdown across all categories', () => {
+    const b = calculateBreakdown({
+      kmCar: 100,
+      dietType: 'average',
+      kwhHome: 200,
+      energySource: 'kwh_gas',
+      clothingItems: 3,
+    });
+    expect(b.transport).toBeGreaterThan(0);
+    expect(b.diet).toBeGreaterThan(0);
+    expect(b.energy).toBeGreaterThan(0);
+    expect(b.shopping).toBeGreaterThan(0);
+  });
 });

@@ -1,12 +1,16 @@
 /**
  * App root — multi-page shell: Landing → Login → Dashboard
+ *
+ * Wrapped in ErrorBoundary so any unexpected rendering error shows a
+ * friendly fallback UI rather than a blank screen.
  */
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Header    from '@/components/layout/Header';
-import Dashboard from '@/pages/Dashboard';
-import Landing   from '@/pages/Landing';
-import Login     from '@/pages/Login';
+import Header        from '@/components/layout/Header';
+import Dashboard     from '@/pages/Dashboard';
+import Landing       from '@/pages/Landing';
+import Login         from '@/pages/Login';
+import ErrorBoundary from '@/components/ui/ErrorBoundary';
 import { useAuthContext } from '@/context/AuthContext';
 
 export default function App() {
@@ -96,11 +100,13 @@ export default function App() {
   };
 
   return (
-    <div className="app-container">
-      <a href="#main-content" className="skip-link">Skip to main content</a>
-      <AnimatePresence mode="wait">
-        {renderPage()}
-      </AnimatePresence>
-    </div>
+    <ErrorBoundary>
+      <div className="app-container">
+        <a href="#main-content" className="skip-link">Skip to main content</a>
+        <AnimatePresence mode="wait">
+          {renderPage()}
+        </AnimatePresence>
+      </div>
+    </ErrorBoundary>
   );
 }

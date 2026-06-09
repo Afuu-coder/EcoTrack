@@ -15,6 +15,7 @@
  * @param {string}   [props.helpText]  - Optional helper text shown below label
  */
 import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { sanitizeNumber } from '@/utils/calculations';
 
 export default function InputField({
@@ -84,3 +85,26 @@ export default function InputField({
     </div>
   );
 }
+
+InputField.propTypes = {
+  /** Visible label text */
+  label:    PropTypes.string.isRequired,
+  /** Unique HTML id (used for label htmlFor and aria-describedby) */
+  id:       PropTypes.string.isRequired,
+  /** Current numeric value (controlled) */
+  value:    PropTypes.number.isRequired,
+  /** Called with sanitised number on change */
+  onChange: PropTypes.func.isRequired,
+  /** Unit label shown after the input (e.g. "km/month") */
+  unit:     PropTypes.string,
+  /** Maximum allowed value (JS-enforced) */
+  max:      PropTypes.number,
+  /** Optional helper text shown below label */
+  helpText: PropTypes.string,
+};
+
+InputField.defaultProps = {
+  unit:     undefined,
+  max:      99999,
+  helpText: undefined,
+};
