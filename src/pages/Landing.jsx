@@ -15,7 +15,7 @@ const FEATURES = [
     color: 'rgba(139,92,246,0.15)',
     borderColor: 'rgba(139,92,246,0.25)',
     title: 'Vertex AI Insights',
-    desc: 'Personalized reduction strategies powered by Google\'s Gemini Pro, fine-tuned on 10M+ emissions data points.',
+    desc: "Personalized reduction strategies powered by Google's Gemini Pro, fine-tuned on 10M+ emissions data points.",
   },
   {
     icon: '📊',
@@ -102,9 +102,7 @@ export default function Landing({ onGetStarted }) {
       <nav
         className="landing-nav"
         style={{
-          background: scrolled
-            ? 'rgba(2, 4, 8, 0.75)'
-            : 'rgba(2, 4, 8, 0.2)',
+          background: scrolled ? 'rgba(2, 4, 8, 0.75)' : 'rgba(2, 4, 8, 0.2)',
           borderBottomColor: scrolled ? 'rgba(255,255,255,0.08)' : 'transparent',
           boxShadow: scrolled ? '0 4px 40px rgba(0,0,0,0.4)' : 'none',
         }}
@@ -114,16 +112,22 @@ export default function Landing({ onGetStarted }) {
             animate={{ rotate: 360 }}
             transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
             style={{
-              width: 36, height: 36,
+              width: 36,
+              height: 36,
               borderRadius: '50%',
               background: 'linear-gradient(135deg, var(--accent-emerald), var(--accent-blue))',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
               boxShadow: 'var(--glow-green)',
             }}
           >
             <IconLeaf size={20} color="#000" />
           </motion.div>
-          <span className="font-display" style={{ fontSize: 20, fontWeight: 800, letterSpacing: '-0.02em' }}>
+          <span
+            className="font-display"
+            style={{ fontSize: 20, fontWeight: 800, letterSpacing: '-0.02em' }}
+          >
             EcoTrack
           </span>
         </div>
@@ -178,7 +182,8 @@ export default function Landing({ onGetStarted }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.25 }}
         >
-          The most intelligent carbon footprint platform. Log your lifestyle, get AI-personalized reduction strategies, and join thousands making a real difference.
+          The most intelligent carbon footprint platform. Log your lifestyle, get AI-personalized
+          reduction strategies, and join thousands making a real difference.
         </motion.p>
 
         <motion.div
@@ -187,13 +192,14 @@ export default function Landing({ onGetStarted }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.4 }}
         >
-          <button
-            onClick={onGetStarted}
-            className="btn-glass btn-primary btn-hero"
-          >
+          <button onClick={onGetStarted} className="btn-glass btn-primary btn-hero">
             Start Tracking Free <IconArrowRight size={20} />
           </button>
-          <a href="#how-it-works" className="btn-outline btn-hero" style={{ padding: '16px 36px', fontSize: 16 }}>
+          <a
+            href="#how-it-works"
+            className="btn-outline btn-hero"
+            style={{ padding: '16px 36px', fontSize: 16 }}
+          >
             See How It Works
           </a>
         </motion.div>
@@ -211,12 +217,11 @@ export default function Landing({ onGetStarted }) {
             { value: 'A+', unit: '', label: 'Best possible grade', color: 'var(--accent-blue)' },
           ].map((card) => (
             <div key={card.label} className="hero-stat-card">
-              <div
-                className="hero-stat-card__value"
-                style={{ color: card.color }}
-              >
+              <div className="hero-stat-card__value" style={{ color: card.color }}>
                 {card.value}
-                <span style={{ fontSize: 16, fontWeight: 500, opacity: 0.7, marginLeft: 4 }}>{card.unit}</span>
+                <span style={{ fontSize: 16, fontWeight: 500, opacity: 0.7, marginLeft: 4 }}>
+                  {card.unit}
+                </span>
               </div>
               <div className="hero-stat-card__label">{card.label}</div>
             </div>
@@ -240,7 +245,9 @@ export default function Landing({ onGetStarted }) {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: i * 0.1 }}
           >
-            <div className="stat-item__number" style={{ color: s.color }}>{s.value}</div>
+            <div className="stat-item__number" style={{ color: s.color }}>
+              {s.value}
+            </div>
             <div className="stat-item__label">{s.label}</div>
           </motion.div>
         ))}
@@ -257,7 +264,8 @@ export default function Landing({ onGetStarted }) {
           <p className="section-eyebrow">Everything You Need</p>
           <h2 className="section-heading gradient-text">Built for Impact</h2>
           <p className="section-subheading">
-            A full-stack carbon intelligence platform backed by Google Cloud infrastructure — powerful enough for enterprises, simple enough for anyone.
+            A full-stack carbon intelligence platform backed by Google Cloud infrastructure —
+            powerful enough for enterprises, simple enough for anyone.
           </p>
         </motion.div>
 
@@ -273,7 +281,10 @@ export default function Landing({ onGetStarted }) {
               transition={{ duration: 0.5, delay: i * 0.08 }}
               whileHover={{ y: -6 }}
             >
-              <div className="feature-icon" style={{ background: 'rgba(255,255,255,0.08)', fontSize: 26 }}>
+              <div
+                className="feature-icon"
+                style={{ background: 'rgba(255,255,255,0.08)', fontSize: 26 }}
+              >
                 {f.icon}
               </div>
               <h3 className="feature-title">{f.title}</h3>
@@ -338,21 +349,36 @@ export default function Landing({ onGetStarted }) {
             <span className="gradient-text-green">Real Change?</span>
           </h2>
           <p className="cta-subtitle">
-            Join 12,000+ users already tracking their impact. It's free, takes 2 minutes, and the AI insights are genuinely life-changing.
+            Join 12,000+ users already tracking their impact. It's free, takes 2 minutes, and the AI
+            insights are genuinely life-changing.
           </p>
 
-          <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 32 }}>
-            <button
-              onClick={onGetStarted}
-              className="btn-glass btn-primary btn-hero"
-            >
+          <div
+            style={{
+              display: 'flex',
+              gap: 16,
+              justifyContent: 'center',
+              flexWrap: 'wrap',
+              marginBottom: 32,
+            }}
+          >
+            <button onClick={onGetStarted} className="btn-glass btn-primary btn-hero">
               Get Started — It's Free <IconArrowRight size={20} />
             </button>
           </div>
 
           <div style={{ display: 'flex', gap: 28, justifyContent: 'center', flexWrap: 'wrap' }}>
-            {['No credit card required', 'Free forever plan', 'GDPR compliant'].map(item => (
-              <div key={item} style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text-secondary)', fontSize: 14 }}>
+            {['No credit card required', 'Free forever plan', 'GDPR compliant'].map((item) => (
+              <div
+                key={item}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  color: 'var(--text-secondary)',
+                  fontSize: 14,
+                }}
+              >
                 <IconCheck size={16} color="var(--accent-emerald)" />
                 {item}
               </div>
@@ -368,9 +394,27 @@ export default function Landing({ onGetStarted }) {
           <span>EcoTrack © 2025 — Powered by Google Cloud</span>
         </div>
         <div style={{ display: 'flex', gap: 24 }}>
-          <span style={{ cursor: 'pointer', transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color='#fff'} onMouseOut={e => e.target.style.color=''}>Privacy</span>
-          <span style={{ cursor: 'pointer', transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color='#fff'} onMouseOut={e => e.target.style.color=''}>Terms</span>
-          <span style={{ cursor: 'pointer', transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color='#fff'} onMouseOut={e => e.target.style.color=''}>Contact</span>
+          <span
+            style={{ cursor: 'pointer', transition: 'color 0.2s' }}
+            onMouseOver={(e) => (e.target.style.color = '#fff')}
+            onMouseOut={(e) => (e.target.style.color = '')}
+          >
+            Privacy
+          </span>
+          <span
+            style={{ cursor: 'pointer', transition: 'color 0.2s' }}
+            onMouseOver={(e) => (e.target.style.color = '#fff')}
+            onMouseOut={(e) => (e.target.style.color = '')}
+          >
+            Terms
+          </span>
+          <span
+            style={{ cursor: 'pointer', transition: 'color 0.2s' }}
+            onMouseOver={(e) => (e.target.style.color = '#fff')}
+            onMouseOut={(e) => (e.target.style.color = '')}
+          >
+            Contact
+          </span>
         </div>
       </footer>
     </div>

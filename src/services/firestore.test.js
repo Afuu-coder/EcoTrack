@@ -5,22 +5,20 @@
  * Strategy: We test saveFootprint, getFootprintHistory, and savePledge
  * against the in-memory mock store (demo mode) so no real Firebase
  * credentials are needed in CI or local test runs.
- *
- * Firebase SDK imports are mocked via vi.mock() so the module under
  * test never tries to hit the network.
  */
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 
 // ── Mock firebase/firestore SDK ────────────────────────────────────────────────
 // These stubs prevent real network calls and let us control return values.
 vi.mock('firebase/firestore', () => ({
-  collection:      vi.fn(() => 'collection-ref'),
-  addDoc:          vi.fn(async () => ({ id: 'mock-doc-id' })),
-  query:           vi.fn(() => 'query-ref'),
-  where:           vi.fn(() => 'where-clause'),
-  orderBy:         vi.fn(() => 'orderBy-clause'),
-  limit:           vi.fn(() => 'limit-clause'),
-  getDocs:         vi.fn(async () => ({
+  collection: vi.fn(() => 'collection-ref'),
+  addDoc: vi.fn(async () => ({ id: 'mock-doc-id' })),
+  query: vi.fn(() => 'query-ref'),
+  where: vi.fn(() => 'where-clause'),
+  orderBy: vi.fn(() => 'orderBy-clause'),
+  limit: vi.fn(() => 'limit-clause'),
+  getDocs: vi.fn(async () => ({
     docs: [
       { id: 'doc1', data: () => ({ userId: 'user1', total: 300, breakdown: {}, inputs: {} }) },
       { id: 'doc2', data: () => ({ userId: 'user1', total: 250, breakdown: {}, inputs: {} }) },
@@ -31,21 +29,20 @@ vi.mock('firebase/firestore', () => ({
 
 // ── Mock the firebase.js initialisation ───────────────────────────────────────
 vi.mock('./firebase', () => ({
-  db:                  null,
+  db: null,
   isFirebaseConfigured: false, // Force demo mode so we test the in-memory path
 }));
 
 // Import module AFTER mocks are set up
-const { saveFootprint, getFootprintHistory, savePledge } =
-  await import('./firestore.js');
+const { saveFootprint, getFootprintHistory, savePledge } = await import('./firestore.js');
 
 // ── saveFootprint ─────────────────────────────────────────────────────────────
 describe('saveFootprint (demo mode)', () => {
   it('returns success: true with a generated id', async () => {
     const result = await saveFootprint('user-abc', {
-      total:     350,
+      total: 350,
       breakdown: { transport: 100, diet: 150, energy: 50, shopping: 50 },
-      inputs:    { kmCar: 200 },
+      inputs: { kmCar: 200 },
     });
 
     expect(result.success).toBe(true);
@@ -65,11 +62,13 @@ describe('saveFootprint (demo mode)', () => {
 
   it('stores the correct total in the mock store', async () => {
     await saveFootprint('user-history', {
-      total: 999, breakdown: {}, inputs: {},
+      total: 999,
+      breakdown: {},
+      inputs: {},
     });
     const history = await getFootprintHistory('user-history');
     // At least the most-recent record has the correct total
-    const found = history.find(d => d.total === 999);
+    const found = history.find((d) => d.total === 999);
     expect(found).toBeDefined();
   });
 
@@ -89,10 +88,10 @@ describe('getFootprintHistory (demo mode)', () => {
   it('filters records by userId', async () => {
     // Save two records for different users
     await saveFootprint('alice', { total: 400, breakdown: {}, inputs: {} });
-    await saveFootprint('bob',   { total: 600, breakdown: {}, inputs: {} });
+    await saveFootprint('bob', { total: 600, breakdown: {}, inputs: {} });
 
     const aliceHistory = await getFootprintHistory('alice');
-    const allAlice = aliceHistory.every(r => r.userId === 'alice');
+    const allAlice = aliceHistory.every((r) => r.userId === 'alice');
     expect(allAlice).toBe(true);
   });
 

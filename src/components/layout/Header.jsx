@@ -4,15 +4,22 @@ import { IconLeaf, IconLogout } from '@tabler/icons-react';
 import AuthBadge from '@/components/ui/AuthBadge';
 import { useAuthContext } from '@/context/AuthContext';
 
-
 export default function Header({ onLogoClick }) {
-  const { authLoading, authMode, isAuthenticated, user, loginWithGoogle, logout } = useAuthContext();
+  const { authLoading, authMode, isAuthenticated, user, loginWithGoogle, logout } =
+    useAuthContext();
 
   return (
     <header
       className="glass-header"
       role="banner"
-      style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', padding: '14px 24px', justifyContent: 'space-between', alignItems: 'center' }}
+      style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: '12px',
+        padding: '14px 24px',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}
     >
       {/* Logo */}
       <div
@@ -26,10 +33,13 @@ export default function Header({ onLogoClick }) {
           animate={{ rotate: 360 }}
           transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
           style={{
-            width: 38, height: 38,
+            width: 38,
+            height: 38,
             borderRadius: '50%',
             background: 'linear-gradient(135deg, var(--accent-emerald), var(--accent-blue))',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
             boxShadow: 'var(--glow-green)',
             flexShrink: 0,
           }}
@@ -37,8 +47,21 @@ export default function Header({ onLogoClick }) {
           <IconLeaf size={22} color="#000" />
         </motion.div>
         <div>
-          <h1 className="font-display gradient-text" style={{ fontSize: '22px', letterSpacing: '-0.03em', lineHeight: 1.1, fontWeight: 800 }}>EcoTrack</h1>
-          <p className="font-display" style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--text-tertiary)' }}>
+          <h1
+            className="font-display gradient-text"
+            style={{ fontSize: '22px', letterSpacing: '-0.03em', lineHeight: 1.1, fontWeight: 800 }}
+          >
+            EcoTrack
+          </h1>
+          <p
+            className="font-display"
+            style={{
+              fontSize: '10px',
+              textTransform: 'uppercase',
+              letterSpacing: '0.12em',
+              color: 'var(--text-tertiary)',
+            }}
+          >
             Carbon Intelligence
           </p>
         </div>
@@ -76,8 +99,3 @@ Header.propTypes = {
   /** Optional click handler for the logo / app name */
   onLogoClick: PropTypes.func,
 };
-
-Header.defaultProps = {
-  onLogoClick: undefined,
-};
-

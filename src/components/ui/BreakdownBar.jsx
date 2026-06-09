@@ -10,17 +10,25 @@ export default function BreakdownBar({ label, kg, totalKg, color, icon }) {
 
   return (
     <div style={{ marginBottom: 16 }}>
-      <div style={{
-        display: 'flex', justifyContent: 'space-between',
-        marginBottom: 8, fontSize: 13, color: 'var(--text-secondary)',
-      }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          marginBottom: 8,
+          fontSize: 13,
+          color: 'var(--text-secondary)',
+        }}
+      >
         <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span aria-hidden="true" style={{ fontSize: 16 }}>{icon}</span>
-          <span className="font-display" style={{ fontWeight: 500 }}>{label}</span>
+          <span aria-hidden="true" style={{ fontSize: 16 }}>
+            {icon}
+          </span>
+          <span className="font-display" style={{ fontWeight: 500 }}>
+            {label}
+          </span>
         </span>
         <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
-          {kg.toLocaleString()} kg{' '}
-          <span style={{ opacity: 0.5, fontWeight: 400 }}>({pct}%)</span>
+          {kg.toLocaleString()} kg <span style={{ opacity: 0.5, fontWeight: 400 }}>({pct}%)</span>
         </span>
       </div>
       <div
@@ -37,7 +45,7 @@ export default function BreakdownBar({ label, kg, totalKg, color, icon }) {
           overflow: 'hidden',
         }}
       >
-        <motion.div 
+        <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${pct}%` }}
           transition={{ type: 'spring', stiffness: 50, damping: 15, delay: 0.1 }}
@@ -46,7 +54,7 @@ export default function BreakdownBar({ label, kg, totalKg, color, icon }) {
             background: `linear-gradient(90deg, ${color}aa, ${color})`,
             borderRadius: 10,
             boxShadow: `0 0 10px ${color}66`,
-          }} 
+          }}
         />
       </div>
     </div>
@@ -55,13 +63,13 @@ export default function BreakdownBar({ label, kg, totalKg, color, icon }) {
 
 BreakdownBar.propTypes = {
   /** Category label (e.g. "Transport") */
-  label:   PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
   /** CO₂e kg for this category */
-  kg:      PropTypes.number.isRequired,
+  kg: PropTypes.number.isRequired,
   /** Total monthly CO₂e kg (used to compute percentage) */
   totalKg: PropTypes.number.isRequired,
   /** CSS color string for the bar fill */
-  color:   PropTypes.string.isRequired,
+  color: PropTypes.string.isRequired,
   /** Emoji icon for the category */
-  icon:    PropTypes.string.isRequired,
+  icon: PropTypes.string.isRequired,
 };

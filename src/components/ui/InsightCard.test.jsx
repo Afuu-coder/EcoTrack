@@ -7,10 +7,10 @@ import { describe, it, expect } from 'vitest';
 import InsightCard from './InsightCard';
 
 const defaultProps = {
-  tip:      'Take public transit twice a week',
+  tip: 'Take public transit twice a week',
   category: 'transport',
   priority: 'high',
-  saving:   34,
+  saving: 34,
 };
 
 describe('InsightCard — rendering', () => {

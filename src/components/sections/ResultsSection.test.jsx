@@ -10,7 +10,7 @@ import { describe, it, expect, vi } from 'vitest';
 import ResultsSection from './ResultsSection';
 
 const defaultProps = {
-  total:     350,
+  total: 350,
   breakdown: { transport: 100, diet: 150, energy: 60, shopping: 40 },
   gradeInfo: { grade: 'B', label: 'Good', color: '#6ee7b7', emoji: '✅' },
   onGetInsights: vi.fn(),
@@ -107,8 +107,8 @@ describe('ResultsSection — accessibility', () => {
   it('Paris target progressbar has descriptive aria-label', () => {
     render(<ResultsSection {...defaultProps} />);
     const bars = screen.getAllByRole('progressbar');
-    const parisBar = bars.find(b =>
-      b.getAttribute('aria-label')?.toLowerCase().includes('paris')
+    const parisBar = bars.find((b) =>
+      b.getAttribute('aria-label')?.toLowerCase().includes('paris'),
     );
     expect(parisBar).toBeDefined();
   });
@@ -116,20 +116,24 @@ describe('ResultsSection — accessibility', () => {
 
 describe('ResultsSection — grade thresholds', () => {
   it('renders grade A for low footprint', () => {
-    render(<ResultsSection
-      {...defaultProps}
-      total={100}
-      gradeInfo={{ grade: 'A', label: 'Excellent', color: '#34d399', emoji: '🌟' }}
-    />);
+    render(
+      <ResultsSection
+        {...defaultProps}
+        total={100}
+        gradeInfo={{ grade: 'A', label: 'Excellent', color: '#34d399', emoji: '🌟' }}
+      />,
+    );
     expect(screen.getByText('A')).toBeInTheDocument();
   });
 
   it('renders grade F for very high footprint', () => {
-    const { container } = render(<ResultsSection
-      {...defaultProps}
-      total={1200}
-      gradeInfo={{ grade: 'F', label: 'High Impact', color: '#ef4444', emoji: '🔴' }}
-    />);
+    const { container } = render(
+      <ResultsSection
+        {...defaultProps}
+        total={1200}
+        gradeInfo={{ grade: 'F', label: 'High Impact', color: '#ef4444', emoji: '🔴' }}
+      />,
+    );
     expect(screen.getByText('F')).toBeInTheDocument();
     // 'High Impact' may be split across elements — use container.textContent
     expect(container.textContent).toContain('High Impact');

@@ -34,14 +34,18 @@
  */
 
 import { useState, useEffect } from 'react';
-import { onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut as firebaseSignOut } from 'firebase/auth';
+import {
+  onAuthStateChanged,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signOut as firebaseSignOut,
+} from 'firebase/auth';
 import { auth, isFirebaseConfigured } from '@/services/firebase';
 
 export function useAuth() {
-  const [userId,      setUserId]      = useState(null);
-  const [user,        setUser]        = useState(null);
+  const [userId, setUserId] = useState(null);
+  const [user, setUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
-  const [authMode,    setAuthMode]    = useState('firebase');
 
   useEffect(() => {
     if (!isFirebaseConfigured) {
@@ -87,7 +91,6 @@ export function useAuth() {
     user,
     isAuthenticated: !!userId,
     authLoading,
-    authMode,
     loginWithGoogle,
     logout,
   };

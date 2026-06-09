@@ -24,8 +24,7 @@ import { useAuth } from '@/hooks/useAuth';
 
 // ── Context ──────────────────────────────────────────────────────────────────
 
-/** @type {React.Context<import('@/hooks/useAuth').AuthState|null>} */
-const AuthContext = createContext(null);
+export const AuthContext = createContext(null);
 
 // ── Provider ─────────────────────────────────────────────────────────────────
 
@@ -37,11 +36,7 @@ const AuthContext = createContext(null);
  */
 export function AuthProvider({ children }) {
   const authState = useAuth();
-  return (
-    <AuthContext.Provider value={authState}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={authState}>{children}</AuthContext.Provider>;
 }
 
 // ── Consumer Hook ─────────────────────────────────────────────────────────────

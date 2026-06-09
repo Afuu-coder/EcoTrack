@@ -18,11 +18,8 @@ import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { sanitizeNumber } from '@/utils/calculations';
 
-export default function InputField({
-  label, id, value, onChange,
-  unit, max = 99999, helpText,
-}) {
-  const [raw,     setRaw]     = useState('');
+export default function InputField({ label, id, value, onChange, unit, max = 99999, helpText }) {
+  const [raw, setRaw] = useState('');
   const [focused, setFocused] = useState(false);
 
   // Sync raw text when parent resets value externally (e.g. resetAll())
@@ -34,7 +31,7 @@ export default function InputField({
   }, [value, focused]);
 
   /** Display: while typing show raw; when blurred show number (empty string if 0) */
-  const displayValue = focused ? raw : (value === 0 ? '' : String(value));
+  const displayValue = focused ? raw : value === 0 ? '' : String(value);
 
   const handleChange = (e) => {
     const str = e.target.value;
@@ -56,9 +53,13 @@ export default function InputField({
 
   return (
     <div className="field">
-      <label htmlFor={id} className="field__label">{label}</label>
+      <label htmlFor={id} className="field__label">
+        {label}
+      </label>
       {helpText && (
-        <p id={`${id}-help`} className="field__help">{helpText}</p>
+        <p id={`${id}-help`} className="field__help">
+          {helpText}
+        </p>
       )}
       <div className="field__input-wrap">
         <input
@@ -79,7 +80,9 @@ export default function InputField({
         />
         {/* aria-hidden: unit is already spoken via the input's aria-label */}
         {unit && (
-          <span className="field__unit" aria-hidden="true">{unit}</span>
+          <span className="field__unit" aria-hidden="true">
+            {unit}
+          </span>
         )}
       </div>
     </div>
@@ -88,23 +91,17 @@ export default function InputField({
 
 InputField.propTypes = {
   /** Visible label text */
-  label:    PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
   /** Unique HTML id (used for label htmlFor and aria-describedby) */
-  id:       PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   /** Current numeric value (controlled) */
-  value:    PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
   /** Called with sanitised number on change */
   onChange: PropTypes.func.isRequired,
   /** Unit label shown after the input (e.g. "km/month") */
-  unit:     PropTypes.string,
+  unit: PropTypes.string,
   /** Maximum allowed value (JS-enforced) */
-  max:      PropTypes.number,
+  max: PropTypes.number,
   /** Optional helper text shown below label */
   helpText: PropTypes.string,
-};
-
-InputField.defaultProps = {
-  unit:     undefined,
-  max:      99999,
-  helpText: undefined,
 };

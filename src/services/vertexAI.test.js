@@ -34,7 +34,9 @@ function mockFetchOk(body) {
 
 /** Returns a fetch that throws a network error */
 function mockFetchError(message = 'Network error') {
-  return vi.fn(async () => { throw new Error(message); });
+  return vi.fn(async () => {
+    throw new Error(message);
+  });
 }
 
 // ── Import after defining mock helpers ────────────────────────────────────────
@@ -44,9 +46,7 @@ const { getAIInsights } = await import('./vertexAI.js');
 describe('getAIInsights — API success', () => {
   beforeEach(() => {
     globalThis.fetch = mockFetchOk({
-      tips: [
-        { category: 'transport', tip: 'Take the train', priority: 'high', saving: 40 },
-      ],
+      tips: [{ category: 'transport', tip: 'Take the train', priority: 'high', saving: 40 }],
       largestCategory: 'transport',
       potentialSaving: 140,
     });
@@ -95,7 +95,9 @@ describe('getAIInsights — local fallback (API fails)', () => {
   });
 
   it('returns tips array even in fallback', async () => {
-    const promise = getAIInsights(mockFootprint({ transport: 300, diet: 100, energy: 50, shopping: 20 }));
+    const promise = getAIInsights(
+      mockFootprint({ transport: 300, diet: 100, energy: 50, shopping: 20 }),
+    );
     vi.runAllTimersAsync();
     const result = await promise;
     expect(Array.isArray(result.tips)).toBe(true);
@@ -103,18 +105,30 @@ describe('getAIInsights — local fallback (API fails)', () => {
   });
 
   it('identifies transport as largest when transport dominates', async () => {
-    const promise = getAIInsights(mockFootprint({
-      total: 600, transport: 400, diet: 100, energy: 60, shopping: 40,
-    }));
+    const promise = getAIInsights(
+      mockFootprint({
+        total: 600,
+        transport: 400,
+        diet: 100,
+        energy: 60,
+        shopping: 40,
+      }),
+    );
     vi.runAllTimersAsync();
     const result = await promise;
     expect(result.largestCategory).toBe('transport');
   });
 
   it('identifies diet as largest when diet dominates', async () => {
-    const promise = getAIInsights(mockFootprint({
-      total: 600, transport: 80, diet: 400, energy: 60, shopping: 60,
-    }));
+    const promise = getAIInsights(
+      mockFootprint({
+        total: 600,
+        transport: 80,
+        diet: 400,
+        energy: 60,
+        shopping: 60,
+      }),
+    );
     vi.runAllTimersAsync();
     const result = await promise;
     expect(result.largestCategory).toBe('diet');
@@ -122,7 +136,9 @@ describe('getAIInsights — local fallback (API fails)', () => {
 
   it('potentialSaving is ~35% of total', async () => {
     const total = 800;
-    const promise = getAIInsights(mockFootprint({ total, transport: 300, diet: 300, energy: 100, shopping: 100 }));
+    const promise = getAIInsights(
+      mockFootprint({ total, transport: 300, diet: 300, energy: 100, shopping: 100 }),
+    );
     vi.runAllTimersAsync();
     const result = await promise;
     // Should be Math.round(total * 0.35) = 280
@@ -130,25 +146,35 @@ describe('getAIInsights — local fallback (API fails)', () => {
   });
 
   it('adds bonus tip for meat_heavy diet', async () => {
-    const promise = getAIInsights(mockFootprint({
-      inputs: { dietType: 'meat_heavy' },
-      diet: 500, transport: 100, energy: 50, shopping: 50,
-    }));
+    const promise = getAIInsights(
+      mockFootprint({
+        inputs: { dietType: 'meat_heavy' },
+        diet: 500,
+        transport: 100,
+        energy: 50,
+        shopping: 50,
+      }),
+    );
     vi.runAllTimersAsync();
     const result = await promise;
-    const hasBonusDietTip = result.tips.some(t => t.tip.toLowerCase().includes('veggi'));
+    const hasBonusDietTip = result.tips.some((t) => t.tip.toLowerCase().includes('veggi'));
     expect(hasBonusDietTip).toBe(true);
   });
 
   it('adds bonus tip for high car usage with no train', async () => {
-    const promise = getAIInsights(mockFootprint({
-      inputs: { kmCar: 500, kmTrain: 0 },
-      transport: 400, diet: 100, energy: 50, shopping: 50,
-    }));
+    const promise = getAIInsights(
+      mockFootprint({
+        inputs: { kmCar: 500, kmTrain: 0 },
+        transport: 400,
+        diet: 100,
+        energy: 50,
+        shopping: 50,
+      }),
+    );
     vi.runAllTimersAsync();
     const result = await promise;
     const hasTransportBonusTip = result.tips.some(
-      t => t.category === 'transport' && t.tip.toLowerCase().includes('train'),
+      (t) => t.category === 'transport' && t.tip.toLowerCase().includes('train'),
     );
     expect(hasTransportBonusTip).toBe(true);
   });
@@ -164,7 +190,11 @@ describe('getAIInsights — edge cases', () => {
   it('handles total = 0 without division by zero', async () => {
     globalThis.fetch = mockFetchError('fail');
     vi.useFakeTimers();
-    const promise = getAIInsights({ total: 0, breakdown: { transport: 0, diet: 0, energy: 0, shopping: 0 }, inputs: {} });
+    const promise = getAIInsights({
+      total: 0,
+      breakdown: { transport: 0, diet: 0, energy: 0, shopping: 0 },
+      inputs: {},
+    });
     vi.runAllTimersAsync();
     const result = await promise;
     expect(result).toBeDefined();

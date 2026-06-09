@@ -3,38 +3,45 @@
  */
 import { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useFootprint }      from '@/hooks/useFootprint';
-import { useAuthContext }    from '@/context/AuthContext';
+import { useFootprint } from '@/hooks/useFootprint';
+import { useAuthContext } from '@/context/AuthContext';
 import { saveFootprint, getFootprintHistory } from '@/services/firestore';
-import { getAIInsights }    from '@/services/vertexAI';
-import LiveTicker           from '@/components/sections/LiveTicker';
-import SurveySection        from '@/components/sections/SurveySection';
-import ResultsSection       from '@/components/sections/ResultsSection';
-import InsightsSection      from '@/components/sections/InsightsSection';
-
+import { getAIInsights } from '@/services/vertexAI';
+import LiveTicker from '@/components/sections/LiveTicker';
+import SurveySection from '@/components/sections/SurveySection';
+import ResultsSection from '@/components/sections/ResultsSection';
+import InsightsSection from '@/components/sections/InsightsSection';
 
 const TABS = [
-  { id: 'survey',   label: 'Calculate',   emoji: '📝' },
-  { id: 'results',  label: 'Results',     emoji: '📊' },
+  { id: 'survey', label: 'Calculate', emoji: '📝' },
+  { id: 'results', label: 'Results', emoji: '📊' },
   { id: 'insights', label: 'AI Insights', emoji: '💡' },
 ];
 
 export default function Dashboard() {
-  const [step, setStep]                   = useState('survey');
-  const [isSaving, setIsSaving]           = useState(false);
-  const [insights, setInsights]           = useState(null);
-  const [loadingAI, setLoadingAI]         = useState(false);
+  const [step, setStep] = useState('survey');
+  const [isSaving, setIsSaving] = useState(false);
+  const [insights, setInsights] = useState(null);
+  const [loadingAI, setLoadingAI] = useState(false);
   const [hasCalculated, setHasCalculated] = useState(false);
-  const [hasInsights, setHasInsights]     = useState(false);
+  const [hasInsights, setHasInsights] = useState(false);
   /** History of past footprint calculations for this user */
-  const [history, setHistory]             = useState([]);
+  const [history, setHistory] = useState([]);
   const [historyLoaded, setHistoryLoaded] = useState(false);
 
-
   const {
-    transport, diet, energy, shopping,
-    setTransport, setDiet, setEnergy, setShopping,
-    inputs, total, breakdown, gradeInfo,
+    transport,
+    diet,
+    energy,
+    shopping,
+    setTransport,
+    setDiet,
+    setEnergy,
+    setShopping,
+    inputs,
+    total,
+    breakdown,
+    gradeInfo,
   } = useFootprint();
 
   const { userId, user } = useAuthContext();
@@ -43,7 +50,7 @@ export default function Dashboard() {
   useEffect(() => {
     if (!userId || historyLoaded) return;
     getFootprintHistory(userId)
-      .then(records => {
+      .then((records) => {
         setHistory(records);
         setHistoryLoaded(true);
       })
@@ -66,17 +73,16 @@ export default function Dashboard() {
           // Refresh history after new save
           return getFootprintHistory(userId);
         })
-        .then(records => setHistory(records))
+        .then((records) => setHistory(records))
         .catch(console.error);
     }
     fetch('/api/analytics', {
-
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId, total, breakdown }),
-    }).catch(err => console.error('Analytics error:', err));
+      body: JSON.stringify({ userId, total, breakdown, cohort: '2025_beta' }),
+    }).catch((err) => console.error('Analytics error:', err));
 
-    await new Promise(r => setTimeout(r, 600));
+    await new Promise((r) => setTimeout(r, 600));
     setIsSaving(false);
     setHasCalculated(true);
     setStep('results');
@@ -93,24 +99,25 @@ export default function Dashboard() {
   }, [total, breakdown, inputs]);
 
   const handleTabClick = (tabId) => {
-    if (tabId === 'results'  && !hasCalculated) return;
-    if (tabId === 'insights' && !hasInsights)   return;
+    if (tabId === 'results' && !hasCalculated) return;
+    if (tabId === 'insights' && !hasInsights) return;
     setStep(tabId);
   };
 
   const isTabDisabled = (tabId) => {
-    if (tabId === 'results')  return !hasCalculated;
+    if (tabId === 'results') return !hasCalculated;
     if (tabId === 'insights') return !hasInsights;
     return false;
   };
 
   return (
     <div className="dashboard-container">
-
       {/* ── User Greeting ─────────────────────────────────── */}
       {user?.displayName && (
         <div style={{ maxWidth: 860, margin: '0 auto', padding: '20px 32px 0' }}>
-          <p style={{ color: 'var(--text-tertiary)', fontSize: 14, fontFamily: 'var(--font-sans)' }}>
+          <p
+            style={{ color: 'var(--text-tertiary)', fontSize: 14, fontFamily: 'var(--font-sans)' }}
+          >
             Welcome back,{' '}
             <span style={{ color: 'var(--accent-green)', fontWeight: 600 }}>
               {user.displayName.split(' ')[0]}
@@ -124,7 +131,7 @@ export default function Dashboard() {
       <nav role="tablist" aria-label="Platform sections" className="dashboard-tabs">
         {TABS.map(({ id, label, emoji }) => {
           const isSelected = step === id;
-          const disabled   = isTabDisabled(id);
+          const disabled = isTabDisabled(id);
           return (
             <button
               key={id}
@@ -154,7 +161,6 @@ export default function Dashboard() {
 
       {/* ── Main Content ──────────────────────────────────── */}
       <main id="main-content" className="main-layout">
-
         <LiveTicker total={total} gradeInfo={gradeInfo} />
 
         <AnimatePresence mode="wait">
@@ -167,10 +173,14 @@ export default function Dashboard() {
               transition={{ duration: 0.3 }}
             >
               <SurveySection
-                transport={transport}  setTransport={setTransport}
-                diet={diet}            setDiet={setDiet}
-                energy={energy}        setEnergy={setEnergy}
-                shopping={shopping}    setShopping={setShopping}
+                transport={transport}
+                setTransport={setTransport}
+                diet={diet}
+                setDiet={setDiet}
+                energy={energy}
+                setEnergy={setEnergy}
+                shopping={shopping}
+                setShopping={setShopping}
                 onCalculate={handleCalculate}
                 isSaving={isSaving}
               />
@@ -202,10 +212,7 @@ export default function Dashboard() {
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3 }}
             >
-              <InsightsSection
-                insights={insights}
-                loadingAI={loadingAI}
-              />
+              <InsightsSection insights={insights} loadingAI={loadingAI} />
             </motion.div>
           )}
         </AnimatePresence>
@@ -233,8 +240,9 @@ export default function Dashboard() {
           >
             {history.slice(0, 6).map((record, idx) => {
               const date = record.ts
-                ? new Date(record.ts?.seconds ? record.ts.seconds * 1000 : record.ts)
-                    .toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
+                ? new Date(
+                    record.ts?.seconds ? record.ts.seconds * 1000 : record.ts,
+                  ).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
                 : `Entry ${history.length - idx}`;
               return (
                 <motion.div
@@ -248,7 +256,12 @@ export default function Dashboard() {
                 >
                   <p
                     className="font-display"
-                    style={{ margin: 0, fontSize: 20, fontWeight: 700, color: 'var(--accent-emerald)' }}
+                    style={{
+                      margin: 0,
+                      fontSize: 20,
+                      fontWeight: 700,
+                      color: 'var(--accent-emerald)',
+                    }}
                   >
                     {(record.total ?? 0).toLocaleString()}
                   </p>

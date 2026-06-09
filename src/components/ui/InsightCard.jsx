@@ -7,9 +7,7 @@ import PropTypes from 'prop-types';
 const PRIORITY_COLORS = { high: '#f97316', medium: '#facc15', low: '#34d399' };
 const CAT_ICONS = { transport: '🚗', diet: '🥗', energy: '⚡', shopping: '🛍️' };
 
-
 export default function InsightCard({ tip, category, priority, saving = null }) {
-
   const borderColor = PRIORITY_COLORS[priority] || PRIORITY_COLORS.low;
   const icon = CAT_ICONS[category] || '💡';
 
@@ -32,7 +30,9 @@ export default function InsightCard({ tip, category, priority, saving = null }) 
           {icon}
         </span>
         <div style={{ flex: 1 }}>
-          <p style={{ margin: 0, fontSize: 13.5, lineHeight: 1.55, color: 'rgba(255,255,255,0.85)' }}>
+          <p
+            style={{ margin: 0, fontSize: 13.5, lineHeight: 1.55, color: 'rgba(255,255,255,0.85)' }}
+          >
             {tip}
           </p>
           {saving != null && saving > 0 && (
@@ -41,11 +41,19 @@ export default function InsightCard({ tip, category, priority, saving = null }) 
             </p>
           )}
         </div>
-        <span style={{
-          fontSize: 10, fontWeight: 700, letterSpacing: '0.06em',
-          color: borderColor, background: `${borderColor}18`,
-          padding: '2px 7px', borderRadius: 20, flexShrink: 0, alignSelf: 'flex-start',
-        }}>
+        <span
+          style={{
+            fontSize: 10,
+            fontWeight: 700,
+            letterSpacing: '0.06em',
+            color: borderColor,
+            background: `${borderColor}18`,
+            padding: '2px 7px',
+            borderRadius: 20,
+            flexShrink: 0,
+            alignSelf: 'flex-start',
+          }}
+        >
           {priority?.toUpperCase()}
         </span>
       </div>
@@ -55,12 +63,11 @@ export default function InsightCard({ tip, category, priority, saving = null }) 
 
 InsightCard.propTypes = {
   /** The recommendation text */
-  tip:      PropTypes.string.isRequired,
+  tip: PropTypes.string.isRequired,
   /** Emission category key: 'transport' | 'diet' | 'energy' | 'shopping' */
   category: PropTypes.string.isRequired,
   /** Priority level: 'high' | 'medium' | 'low' */
   priority: PropTypes.string.isRequired,
   /** Estimated CO₂e saving in kg/month (optional) */
-  saving:   PropTypes.number,
+  saving: PropTypes.number,
 };
-

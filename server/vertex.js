@@ -3,7 +3,10 @@ import { VertexAI } from '@google-cloud/vertexai';
 
 // Determine the GCP project ID. In Cloud Run, this is automatically available via default credentials,
 // but we can also fall back to the env var if provided.
-const projectId = process.env.VITE_FIREBASE_PROJECT_ID || process.env.GOOGLE_CLOUD_PROJECT || 'ecotrack-carbon-platform';
+const projectId =
+  process.env.VITE_FIREBASE_PROJECT_ID ||
+  process.env.GOOGLE_CLOUD_PROJECT ||
+  'ecotrack-carbon-platform';
 const location = 'us-central1';
 
 let vertexAI;
@@ -28,7 +31,7 @@ export async function getVertexInsights(footprintData) {
     return generateLocalInsights(footprintData);
   }
 
-  const { total, breakdown, inputs } = footprintData;
+  const { total, breakdown } = footprintData;
 
   const prompt = `
 You are an expert sustainability consultant analyzing a user's monthly carbon footprint.
@@ -54,9 +57,12 @@ Provide 3 highly specific, realistic tips focused mostly on the largest categori
     const resp = await generativeModel.generateContent({
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
     });
-    
+
     const responseText = resp.response.candidates[0].content.parts[0].text;
-    const jsonStr = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
+    const jsonStr = responseText
+      .replace(/```json/g, '')
+      .replace(/```/g, '')
+      .trim();
     return JSON.parse(jsonStr);
   } catch (err) {
     console.error('[Vertex AI] Gemini generation error, using fallback:', err);
@@ -65,9 +71,9 @@ Provide 3 highly specific, realistic tips focused mostly on the largest categori
 }
 
 // Fallback logic for when GCP credentials are not available locally
-function generateLocalInsights({ total, breakdown, inputs }) {
+function generateLocalInsights({ total, breakdown }) {
   const tips = [];
-  const { transport, diet, energy } = breakdown;
+  const { energy } = breakdown;
   const sorted = Object.entries(breakdown).sort(([, a], [, b]) => b - a);
   const largest = sorted[0][0];
 
@@ -79,7 +85,9 @@ function generateLocalInsights({ total, breakdown, inputs }) {
   };
 
   const primaryTips = tipMap[largest] || tipMap.energy;
-  primaryTips.forEach(t => tips.push({ category: largest, tip: t.tip, priority: 'high', saving: t.saving }));
+  primaryTips.forEach((t) =>
+    tips.push({ category: largest, tip: t.tip, priority: 'high', saving: t.saving }),
+  );
 
   return {
     tips,

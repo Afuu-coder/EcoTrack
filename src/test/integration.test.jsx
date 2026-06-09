@@ -7,7 +7,12 @@
  */
 import { render, screen, fireEvent, within } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { calculateMonthlyFootprint, calculateBreakdown, gradeFootprint, vsParisTarget } from '@/utils/calculations';
+import {
+  calculateMonthlyFootprint,
+  calculateBreakdown,
+  gradeFootprint,
+  vsParisTarget,
+} from '@/utils/calculations';
 import BreakdownBar from '@/components/ui/BreakdownBar';
 import InsightCard from '@/components/ui/InsightCard';
 import LiveTicker from '@/components/sections/LiveTicker';
@@ -17,9 +22,15 @@ import LiveTicker from '@/components/sections/LiveTicker';
 
 describe('Full calculation pipeline — low footprint user', () => {
   const inputs = {
-    kmCar: 0, kmBus: 50, kmTrain: 100, flightHours: 0,
-    dietType: 'vegan', kwhHome: 200, energySource: 'kwh_renewable',
-    clothingItems: 2, electronicsItems: 0,
+    kmCar: 0,
+    kmBus: 50,
+    kmTrain: 100,
+    flightHours: 0,
+    dietType: 'vegan',
+    kwhHome: 200,
+    energySource: 'kwh_renewable',
+    clothingItems: 2,
+    electronicsItems: 0,
   };
 
   it('produces a positive total', () => {
@@ -45,9 +56,15 @@ describe('Full calculation pipeline — low footprint user', () => {
 
 describe('Full calculation pipeline — high footprint user', () => {
   const inputs = {
-    kmCar: 800, kmBus: 0, kmTrain: 0, flightHours: 40,
-    dietType: 'meat_heavy', kwhHome: 800, energySource: 'kwh_coal',
-    clothingItems: 20, electronicsItems: 3,
+    kmCar: 800,
+    kmBus: 0,
+    kmTrain: 0,
+    flightHours: 40,
+    dietType: 'meat_heavy',
+    kwhHome: 800,
+    energySource: 'kwh_coal',
+    clothingItems: 20,
+    electronicsItems: 3,
   };
 
   it('produces a large total (high emitter)', () => {
@@ -79,14 +96,14 @@ describe('Full calculation pipeline — high footprint user', () => {
 
 describe('LiveTicker ↔ gradeFootprint integration', () => {
   it('shows correct grade letter when total is below Paris target', () => {
-    const total     = 150;
+    const total = 150;
     const gradeInfo = gradeFootprint(total);
     render(<LiveTicker total={total} gradeInfo={gradeInfo} />);
     expect(screen.getByText('A')).toBeInTheDocument();
   });
 
   it('shows "High Impact" label for F grade', () => {
-    const total     = 1500;
+    const total = 1500;
     const gradeInfo = gradeFootprint(total);
     render(<LiveTicker total={total} gradeInfo={gradeInfo} />);
     expect(screen.getByText('High Impact')).toBeInTheDocument();
@@ -95,11 +112,19 @@ describe('LiveTicker ↔ gradeFootprint integration', () => {
 
 describe('BreakdownBar ↔ calculateBreakdown integration', () => {
   it('renders correct percentage from real breakdown data', () => {
-    const inputs  = { kmCar: 200, dietType: 'none', kwhHome: 0 };
-    const total   = calculateMonthlyFootprint(inputs);
-    const bd      = calculateBreakdown(inputs);
+    const inputs = { kmCar: 200, dietType: 'none', kwhHome: 0 };
+    const total = calculateMonthlyFootprint(inputs);
+    const bd = calculateBreakdown(inputs);
 
-    render(<BreakdownBar label="Transport" kg={bd.transport} totalKg={total} color="#60a5fa" icon="🚗" />);
+    render(
+      <BreakdownBar
+        label="Transport"
+        kg={bd.transport}
+        totalKg={total}
+        color="#60a5fa"
+        icon="🚗"
+      />,
+    );
 
     const bar = screen.getByRole('progressbar');
     // aria-valuenow should be the percentage string
@@ -110,10 +135,10 @@ describe('BreakdownBar ↔ calculateBreakdown integration', () => {
 describe('InsightCard ↔ vertexAI fallback integration', () => {
   it('renders a high-priority transport tip correctly', () => {
     const tip = {
-      tip:      'Switch 2 car trips/week to public transit',
+      tip: 'Switch 2 car trips/week to public transit',
       category: 'transport',
       priority: 'high',
-      saving:   34,
+      saving: 34,
     };
     render(<InsightCard {...tip} />);
     expect(screen.getByText(/Switch 2 car trips/i)).toBeInTheDocument();
@@ -123,10 +148,10 @@ describe('InsightCard ↔ vertexAI fallback integration', () => {
 
   it('renders a medium-priority diet tip correctly', () => {
     const tip = {
-      tip:      'Going meat-free 2 days/week saves 30 kg',
+      tip: 'Going meat-free 2 days/week saves 30 kg',
       category: 'diet',
       priority: 'medium',
-      saving:   30,
+      saving: 30,
     };
     render(<InsightCard {...tip} />);
     expect(screen.getByText(/meat-free/i)).toBeInTheDocument();
@@ -144,14 +169,22 @@ describe('Emissions constants — sanity checks', () => {
   });
 
   it('vegan diet is less than average diet', () => {
-    const vegan   = calculateMonthlyFootprint({ dietType: 'vegan',   kwhHome: 0 });
+    const vegan = calculateMonthlyFootprint({ dietType: 'vegan', kwhHome: 0 });
     const average = calculateMonthlyFootprint({ dietType: 'average', kwhHome: 0 });
     expect(vegan).toBeLessThan(average);
   });
 
   it('renewable energy has less than 5% emissions vs coal for same kWh', () => {
-    const coal      = calculateMonthlyFootprint({ dietType: 'none', kwhHome: 100, energySource: 'kwh_coal' });
-    const renewable = calculateMonthlyFootprint({ dietType: 'none', kwhHome: 100, energySource: 'kwh_renewable' });
+    const coal = calculateMonthlyFootprint({
+      dietType: 'none',
+      kwhHome: 100,
+      energySource: 'kwh_coal',
+    });
+    const renewable = calculateMonthlyFootprint({
+      dietType: 'none',
+      kwhHome: 100,
+      energySource: 'kwh_renewable',
+    });
     // coal=82kg, renewable=2kg → renewable is 2.4% of coal
     expect(renewable / coal).toBeLessThan(0.05);
   });

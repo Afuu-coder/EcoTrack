@@ -6,10 +6,10 @@
  */
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Header        from '@/components/layout/Header';
-import Dashboard     from '@/pages/Dashboard';
-import Landing       from '@/pages/Landing';
-import Login         from '@/pages/Login';
+import Header from '@/components/layout/Header';
+import Dashboard from '@/pages/Dashboard';
+import Landing from '@/pages/Landing';
+import Login from '@/pages/Login';
 import ErrorBoundary from '@/components/ui/ErrorBoundary';
 import { useAuthContext } from '@/context/AuthContext';
 
@@ -29,12 +29,17 @@ export default function App() {
   // ── Loading spinner ────────────────────────────────────────
   if (authLoading) {
     return (
-      <div style={{
-        display: 'flex', flexDirection: 'column',
-        alignItems: 'center', justifyContent: 'center',
-        height: '100vh', gap: 16,
-        background: 'var(--bg-deep)',
-      }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '100vh',
+          gap: 16,
+          background: 'var(--bg-deep)',
+        }}
+      >
         <div className="mesh-bg">
           <div className="mesh-orb mesh-orb-1" />
           <div className="mesh-orb mesh-orb-2" />
@@ -43,7 +48,8 @@ export default function App() {
           animate={{ rotate: 360 }}
           transition={{ duration: 1.2, repeat: Infinity, ease: 'linear' }}
           style={{
-            width: 48, height: 48,
+            width: 48,
+            height: 48,
             border: '3px solid rgba(255,255,255,0.1)',
             borderTopColor: 'var(--accent-emerald)',
             borderRadius: '50%',
@@ -102,10 +108,10 @@ export default function App() {
   return (
     <ErrorBoundary>
       <div className="app-container">
-        <a href="#main-content" className="skip-link">Skip to main content</a>
-        <AnimatePresence mode="wait">
-          {renderPage()}
-        </AnimatePresence>
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
+        <AnimatePresence mode="wait">{renderPage()}</AnimatePresence>
       </div>
     </ErrorBoundary>
   );

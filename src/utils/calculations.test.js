@@ -28,7 +28,9 @@ describe('calculateMonthlyFootprint', () => {
 
   it('transport: car adds correct emissions', () => {
     const carOnly = calculateMonthlyFootprint({
-      kmCar: 100, dietType: 'none', kwhHome: 0,
+      kmCar: 100,
+      dietType: 'none',
+      kwhHome: 0,
     });
     // 100 km × 0.21 kg/km = 21 kg transport (diet "none" falls back to average)
     expect(carOnly).toBeGreaterThanOrEqual(21);
@@ -42,8 +44,16 @@ describe('calculateMonthlyFootprint', () => {
   });
 
   it('renewable energy has near-zero emissions vs coal', () => {
-    const coal = calculateMonthlyFootprint({ kwhHome: 500, energySource: 'kwh_coal', dietType: 'none' });
-    const solar = calculateMonthlyFootprint({ kwhHome: 500, energySource: 'kwh_renewable', dietType: 'none' });
+    const coal = calculateMonthlyFootprint({
+      kwhHome: 500,
+      energySource: 'kwh_coal',
+      dietType: 'none',
+    });
+    const solar = calculateMonthlyFootprint({
+      kwhHome: 500,
+      energySource: 'kwh_renewable',
+      dietType: 'none',
+    });
     // coal=0.82 kg/kWh, renewable=0.02 kg/kWh → ratio = 41x (energy only)
     // diet fallback adds a baseline to both equally, so net transport/energy difference: 410 vs 10
     expect(coal).toBeGreaterThan(solar * 2);
@@ -52,7 +62,7 @@ describe('calculateMonthlyFootprint', () => {
   it('shopping is annualised (÷12)', () => {
     const none = calculateMonthlyFootprint({ clothingItems: 0, dietType: 'none', kwhHome: 0 });
     const shop = calculateMonthlyFootprint({ clothingItems: 12, dietType: 'none', kwhHome: 0 });
-    expect(shop - none).toBe(Math.round(12 * 33.4 / 12)); // = 33 kg
+    expect(shop - none).toBe(Math.round((12 * 33.4) / 12)); // = 33 kg
   });
 
   it('returns integer (rounded)', () => {
@@ -82,7 +92,7 @@ describe('calculateBreakdown', () => {
 
   it('all values are non-negative', () => {
     const b = calculateBreakdown({ kmCar: 0, kmBus: 0, kwhHome: 0 });
-    Object.values(b).forEach(v => expect(v).toBeGreaterThanOrEqual(0));
+    Object.values(b).forEach((v) => expect(v).toBeGreaterThanOrEqual(0));
   });
 });
 
@@ -229,7 +239,7 @@ describe('gradeFootprint — C and D grades', () => {
   });
 
   it('all grades return a label string', () => {
-    ['A','B','C','D','F'].forEach(expectedGrade => {
+    ['A', 'B', 'C', 'D', 'F'].forEach((expectedGrade) => {
       const testKg = { A: 100, B: 250, C: 500, D: 700, F: 1000 }[expectedGrade];
       const { label } = gradeFootprint(testKg);
       expect(typeof label).toBe('string');
@@ -243,15 +253,15 @@ describe('gradeFootprint — C and D grades', () => {
 describe('calculateBreakdown — electronics and flights', () => {
   it('electronics items contribute to shopping breakdown', () => {
     const noElec = calculateBreakdown({ dietType: 'none', kwhHome: 0, electronicsItems: 0 });
-    const elec   = calculateBreakdown({ dietType: 'none', kwhHome: 0, electronicsItems: 2 });
+    const elec = calculateBreakdown({ dietType: 'none', kwhHome: 0, electronicsItems: 2 });
     // 2 devices × 70 kg ÷ 12 ≈ 11 kg
     expect(elec.shopping).toBeGreaterThan(noElec.shopping);
-    expect(elec.shopping - noElec.shopping).toBeCloseTo(Math.round(2 * 70 / 12), 0);
+    expect(elec.shopping - noElec.shopping).toBeCloseTo(Math.round((2 * 70) / 12), 0);
   });
 
   it('flight hours contribute to transport breakdown', () => {
     const noFlight = calculateBreakdown({ dietType: 'none', kwhHome: 0, flightHours: 0 });
-    const flight   = calculateBreakdown({ dietType: 'none', kwhHome: 0, flightHours: 6 });
+    const flight = calculateBreakdown({ dietType: 'none', kwhHome: 0, flightHours: 6 });
     // 6h × 800 km/h × 0.255 kg/km ÷ 12 months = 102 kg
     expect(flight.transport - noFlight.transport).toBe(102);
   });

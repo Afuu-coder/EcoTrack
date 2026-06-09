@@ -11,8 +11,14 @@
  */
 
 import {
-  collection, addDoc, query, where, orderBy,
-  limit, getDocs, serverTimestamp,
+  collection,
+  addDoc,
+  query,
+  where,
+  orderBy,
+  limit,
+  getDocs,
+  serverTimestamp,
 } from 'firebase/firestore';
 import { db, isFirebaseConfigured } from './firebase';
 
@@ -46,10 +52,10 @@ export async function saveFootprint(userId, data) {
   try {
     const ref = await addDoc(collection(db, 'footprints'), {
       userId,
-      total:     data.total,
+      total: data.total,
       breakdown: data.breakdown,
-      inputs:    data.inputs,
-      ts:        serverTimestamp(),
+      inputs: data.inputs,
+      ts: serverTimestamp(),
     });
     return { id: ref.id, success: true };
   } catch (err) {
@@ -67,7 +73,7 @@ export async function saveFootprint(userId, data) {
 export async function getFootprintHistory(userId) {
   if (!isFirebaseConfigured) {
     return _mockStore
-      .filter(d => d.userId === userId)
+      .filter((d) => d.userId === userId)
       .slice(-10)
       .reverse();
   }
@@ -80,7 +86,7 @@ export async function getFootprintHistory(userId) {
       limit(10),
     );
     const snap = await getDocs(q);
-    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
   } catch (err) {
     console.error('[Firestore] getFootprintHistory failed:', err.message);
     return [];
@@ -98,7 +104,7 @@ export async function getFootprintHistory(userId) {
  */
 export async function savePledge(userId, pledges) {
   // Input guard: prevent storing huge payloads
-  const safePledges = pledges.slice(0, 10).map(p => String(p).slice(0, 200));
+  const safePledges = pledges.slice(0, 10).map((p) => String(p).slice(0, 200));
 
   if (!isFirebaseConfigured) {
     console.info('[Firestore DEMO] Pledge saved:', safePledges);
@@ -108,8 +114,8 @@ export async function savePledge(userId, pledges) {
   try {
     const ref = await addDoc(collection(db, 'pledges'), {
       userId,
-      pledges:   safePledges,
-      ts:        serverTimestamp(),
+      pledges: safePledges,
+      ts: serverTimestamp(),
     });
     return { id: ref.id, success: true };
   } catch (err) {

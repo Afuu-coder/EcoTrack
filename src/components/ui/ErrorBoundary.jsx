@@ -65,36 +65,47 @@ export default class ErrorBoundary extends Component {
           role="alert"
           aria-live="assertive"
           style={{
-            display:        'flex',
-            flexDirection:  'column',
-            alignItems:     'center',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
             justifyContent: 'center',
-            minHeight:      '60vh',
-            gap:            16,
-            padding:        32,
-            textAlign:      'center',
+            minHeight: '60vh',
+            gap: 16,
+            padding: 32,
+            textAlign: 'center',
           }}
         >
-          <div style={{ fontSize: 48 }} aria-hidden="true">⚠️</div>
-          <h2 style={{
-            margin:     0,
-            fontSize:   22,
-            fontWeight: 700,
-            color:      'var(--text-primary, #f1f5f9)',
-            fontFamily: 'var(--font-display, sans-serif)',
-          }}>
+          <div style={{ fontSize: 48 }} aria-hidden="true">
+            ⚠️
+          </div>
+          <h2
+            style={{
+              margin: 0,
+              fontSize: 22,
+              fontWeight: 700,
+              color: 'var(--text-primary, #f1f5f9)',
+              fontFamily: 'var(--font-display, sans-serif)',
+            }}
+          >
             Something went wrong
           </h2>
-          <p style={{
-            margin:     0,
-            fontSize:   14,
-            color:      'var(--text-tertiary, #64748b)',
-            maxWidth:   400,
-            lineHeight: 1.6,
-          }}>
+          <p
+            style={{
+              margin: 0,
+              fontSize: 14,
+              color: 'var(--text-tertiary, #64748b)',
+              maxWidth: 400,
+              lineHeight: 1.6,
+            }}
+          >
             An unexpected error occurred. Please try reloading the page.
             {import.meta.env.DEV && errorMessage && (
-              <><br /><code style={{ color: 'var(--accent-red, #ef4444)', fontSize: 12 }}>{errorMessage}</code></>
+              <>
+                <br />
+                <code style={{ color: 'var(--accent-red, #ef4444)', fontSize: 12 }}>
+                  {errorMessage}
+                </code>
+              </>
             )}
           </p>
           <div style={{ display: 'flex', gap: 12 }}>
@@ -102,14 +113,14 @@ export default class ErrorBoundary extends Component {
               id="error-boundary-retry"
               onClick={this.handleReset}
               style={{
-                padding:      '10px 20px',
+                padding: '10px 20px',
                 borderRadius: 8,
-                border:       '1px solid var(--glass-border, rgba(255,255,255,0.1))',
-                background:   'var(--glass-bg, rgba(255,255,255,0.05))',
-                color:        'var(--text-primary, #f1f5f9)',
-                cursor:       'pointer',
-                fontSize:     14,
-                fontWeight:   600,
+                border: '1px solid var(--glass-border, rgba(255,255,255,0.1))',
+                background: 'var(--glass-bg, rgba(255,255,255,0.05))',
+                color: 'var(--text-primary, #f1f5f9)',
+                cursor: 'pointer',
+                fontSize: 14,
+                fontWeight: 600,
               }}
             >
               Try again
@@ -118,14 +129,14 @@ export default class ErrorBoundary extends Component {
               id="error-boundary-reload"
               onClick={() => window.location.reload()}
               style={{
-                padding:      '10px 20px',
+                padding: '10px 20px',
                 borderRadius: 8,
-                border:       'none',
-                background:   'var(--accent-emerald, #34d399)',
-                color:        '#000',
-                cursor:       'pointer',
-                fontSize:     14,
-                fontWeight:   600,
+                border: 'none',
+                background: 'var(--accent-emerald, #34d399)',
+                color: '#000',
+                cursor: 'pointer',
+                fontSize: 14,
+                fontWeight: 600,
               }}
             >
               Reload page

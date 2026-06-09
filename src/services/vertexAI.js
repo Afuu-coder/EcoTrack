@@ -29,7 +29,7 @@ export async function getAIInsights(footprintData) {
   } catch (err) {
     console.warn('[Vertex AI] Backend call failed, using local fallback:', err.message);
     // Simulate network latency for realistic UX if fallback happens instantly
-    await new Promise(r => setTimeout(r, 1400));
+    await new Promise((r) => setTimeout(r, 1400));
     return generateLocalInsights(footprintData);
   }
 }
@@ -49,24 +49,42 @@ function generateLocalInsights({ total, breakdown, inputs }) {
 
   // Find biggest emission category — fallback to 'energy' if breakdown is empty
   const entries = Object.entries(safeBreakdown).filter(([, v]) => typeof v === 'number');
-  const sorted  = entries.sort(([, a], [, b]) => b - a);
+  const sorted = entries.sort(([, a], [, b]) => b - a);
   const largest = sorted.length > 0 ? sorted[0][0] : 'energy';
 
   const tipMap = {
     transport: [
       { tip: 'Switch 2 car trips/week to public transit — save ~34 kg CO₂/month', saving: 34 },
-      { tip: 'Carpooling 3 days/week cuts transport emissions by up to 40%', saving: Math.round(transport * 0.4) },
-      { tip: 'Try cycling or walking for trips under 5 km — zero emissions & free fitness!', saving: 18 },
+      {
+        tip: 'Carpooling 3 days/week cuts transport emissions by up to 40%',
+        saving: Math.round(transport * 0.4),
+      },
+      {
+        tip: 'Try cycling or walking for trips under 5 km — zero emissions & free fitness!',
+        saving: 18,
+      },
     ],
     diet: [
       { tip: 'Going meat-free 2 days/week can save ~30 kg CO₂ monthly', saving: 30 },
-      { tip: 'Buying locally-grown produce cuts food transport emissions by ~15%', saving: Math.round(diet * 0.15) },
+      {
+        tip: 'Buying locally-grown produce cuts food transport emissions by ~15%',
+        saving: Math.round(diet * 0.15),
+      },
       { tip: 'Plant-based swaps for breakfast alone can save 8 kg CO₂/month', saving: 8 },
     ],
     energy: [
-      { tip: 'Switching to a renewable energy tariff cuts home emissions by ~90%', saving: Math.round(energy * 0.9) },
-      { tip: 'LED bulbs + a smart thermostat reduce energy costs by up to 20%', saving: Math.round(energy * 0.2) },
-      { tip: `Your home is ${Math.round((energy / (total || 1)) * 100)}% of your footprint — insulation helps most`, saving: Math.round(energy * 0.3) },
+      {
+        tip: 'Switching to a renewable energy tariff cuts home emissions by ~90%',
+        saving: Math.round(energy * 0.9),
+      },
+      {
+        tip: 'LED bulbs + a smart thermostat reduce energy costs by up to 20%',
+        saving: Math.round(energy * 0.2),
+      },
+      {
+        tip: `Your home is ${Math.round((energy / (total || 1)) * 100)}% of your footprint — insulation helps most`,
+        saving: Math.round(energy * 0.3),
+      },
     ],
     shopping: [
       { tip: 'Buy second-hand clothing — fashion industry = 10% of global CO₂', saving: 22 },
@@ -77,18 +95,28 @@ function generateLocalInsights({ total, breakdown, inputs }) {
 
   // Primary tips for largest category
   const primaryTips = tipMap[largest] || tipMap.energy;
-  primaryTips.forEach(t =>
-    tips.push({ category: largest, tip: t.tip, priority: 'high', saving: t.saving })
+  primaryTips.forEach((t) =>
+    tips.push({ category: largest, tip: t.tip, priority: 'high', saving: t.saving }),
   );
 
   // Bonus tip if meat-heavy diet
   if (inputs?.dietType === 'meat_heavy') {
-    tips.push({ category: 'diet', tip: 'Even one veggie day/week = ~15 kg saved monthly', priority: 'medium', saving: 15 });
+    tips.push({
+      category: 'diet',
+      tip: 'Even one veggie day/week = ~15 kg saved monthly',
+      priority: 'medium',
+      saving: 15,
+    });
   }
 
   // Bonus tip if driving and also has short public transit option
   if ((inputs?.kmCar || 0) > 200 && (inputs?.kmTrain || 0) === 0) {
-    tips.push({ category: 'transport', tip: 'You drive a lot but use no train — check if rail is available for regular routes', priority: 'medium', saving: 40 });
+    tips.push({
+      category: 'transport',
+      tip: 'You drive a lot but use no train — check if rail is available for regular routes',
+      priority: 'medium',
+      saving: 40,
+    });
   }
 
   return {

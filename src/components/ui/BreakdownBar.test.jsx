@@ -46,7 +46,9 @@ describe('BreakdownBar — rendering', () => {
   });
 
   it('renders the category icon (aria-hidden)', () => {
-    const { container } = render(<BreakdownBar label="Transport" kg={100} totalKg={500} color="#60a5fa" icon="🚗" />);
+    const { container } = render(
+      <BreakdownBar label="Transport" kg={100} totalKg={500} color="#60a5fa" icon="🚗" />,
+    );
     expect(container.textContent).toContain('🚗');
   });
 });

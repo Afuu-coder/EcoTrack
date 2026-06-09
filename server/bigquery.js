@@ -1,7 +1,10 @@
 // env loaded by server/index.js via dotenv
 import { BigQuery } from '@google-cloud/bigquery';
 
-const projectId = process.env.VITE_FIREBASE_PROJECT_ID || process.env.GOOGLE_CLOUD_PROJECT || 'ecotrack-carbon-platform';
+const projectId =
+  process.env.VITE_FIREBASE_PROJECT_ID ||
+  process.env.GOOGLE_CLOUD_PROJECT ||
+  'ecotrack-carbon-platform';
 let bigquery;
 
 try {
@@ -37,6 +40,7 @@ async function ensureSchema() {
         { name: 'diet', type: 'INTEGER', mode: 'REQUIRED' },
         { name: 'energy', type: 'INTEGER', mode: 'REQUIRED' },
         { name: 'shopping', type: 'INTEGER', mode: 'REQUIRED' },
+        { name: 'cohort', type: 'STRING', mode: 'NULLABLE' },
         { name: 'timestamp', type: 'TIMESTAMP', mode: 'REQUIRED' },
       ];
       await table.create({ schema });
@@ -50,7 +54,7 @@ async function ensureSchema() {
 // Call once on startup
 ensureSchema();
 
-export async function logAnalytics(userId, total, breakdown) {
+export async function logAnalytics(userId, total, breakdown, cohort = 'default_cohort') {
   if (!bigquery) {
     console.log('[BigQuery - DEMO] Logging analytics:', { userId, total, breakdown });
     return;
@@ -64,6 +68,7 @@ export async function logAnalytics(userId, total, breakdown) {
       diet: breakdown.diet,
       energy: breakdown.energy,
       shopping: breakdown.shopping,
+      cohort: cohort,
       timestamp: bigquery.timestamp(new Date()),
     };
 

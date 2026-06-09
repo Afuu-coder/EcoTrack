@@ -78,8 +78,8 @@ export function calculateMonthlyFootprint(inputs = {}) {
   } = inputs;
 
   const transport =
-    kmCar   * EMISSION_FACTORS.transport.car   +
-    kmBus   * EMISSION_FACTORS.transport.bus   +
+    kmCar * EMISSION_FACTORS.transport.car +
+    kmBus * EMISSION_FACTORS.transport.bus +
     kmTrain * EMISSION_FACTORS.transport.train +
     // Flights: annual hours × avg speed (800 km/h) × kg/km ÷ 12 months
     (flightHours * 800 * EMISSION_FACTORS.transport.flight) / 12;
@@ -94,8 +94,9 @@ export function calculateMonthlyFootprint(inputs = {}) {
 
   // Shopping: annual items amortised to monthly
   const shopping =
-    (clothingItems    * EMISSION_FACTORS.shopping.clothing +
-     electronicsItems * EMISSION_FACTORS.shopping.electronics) / 12;
+    (clothingItems * EMISSION_FACTORS.shopping.clothing +
+      electronicsItems * EMISSION_FACTORS.shopping.electronics) /
+    12;
 
   return Math.round(transport + diet + energy + shopping);
 }
@@ -114,8 +115,14 @@ export function calculateMonthlyFootprint(inputs = {}) {
 export function calculateBreakdown(inputs = {}) {
   /** Baseline with all categories zeroed out */
   const zero = {
-    kmCar: 0, kmBus: 0, kmTrain: 0, flightHours: 0,
-    dietType: 'none', kwhHome: 0, clothingItems: 0, electronicsItems: 0,
+    kmCar: 0,
+    kmBus: 0,
+    kmTrain: 0,
+    flightHours: 0,
+    dietType: 'none',
+    kwhHome: 0,
+    clothingItems: 0,
+    electronicsItems: 0,
   };
 
   return {
@@ -162,7 +169,7 @@ export function calculateBreakdown(inputs = {}) {
  */
 export function sanitizeNumber(val, max = 99999) {
   const cleaned = String(val).replace(/[^0-9.]/g, '');
-  const parsed  = parseFloat(cleaned);
+  const parsed = parseFloat(cleaned);
 
   if (isNaN(parsed)) return 0;
   return Math.min(Math.abs(parsed), max);
@@ -186,11 +193,11 @@ export function sanitizeNumber(val, max = 99999) {
  * gradeFootprint(1200) // → { grade: 'F', label: 'High Impact', color: '#ef4444', emoji: '🔴' }
  */
 export function gradeFootprint(kg) {
-  if (kg <= PARIS_TARGET_KG)           return { grade: 'A', ...GRADE_CONFIG.A };
-  if (kg <= PARIS_TARGET_KG * 1.5)    return { grade: 'B', ...GRADE_CONFIG.B };
+  if (kg <= PARIS_TARGET_KG) return { grade: 'A', ...GRADE_CONFIG.A };
+  if (kg <= PARIS_TARGET_KG * 1.5) return { grade: 'B', ...GRADE_CONFIG.B };
   if (kg <= MONTHLY_AVERAGE_KG * 0.7) return { grade: 'C', ...GRADE_CONFIG.C };
-  if (kg <= MONTHLY_AVERAGE_KG)       return { grade: 'D', ...GRADE_CONFIG.D };
-  return                                      { grade: 'F', ...GRADE_CONFIG.F };
+  if (kg <= MONTHLY_AVERAGE_KG) return { grade: 'D', ...GRADE_CONFIG.D };
+  return { grade: 'F', ...GRADE_CONFIG.F };
 }
 
 /**

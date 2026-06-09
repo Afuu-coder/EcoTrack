@@ -1,12 +1,18 @@
 import { motion } from 'framer-motion';
-import PropTypes  from 'prop-types';
+import PropTypes from 'prop-types';
 
-
-export default function AuthBadge({ authLoading, isAuthenticated, user }) {
+export default function AuthBadge({ authLoading, isAuthenticated, user = null }) {
   if (authLoading) {
     return (
-      <div className="btn-glass" style={{ cursor: 'default', padding: '6px 16px' }} role="status" aria-live="polite">
-        <span className="shimmer-text" style={{ fontSize: 12 }}>Loading…</span>
+      <div
+        className="btn-glass"
+        style={{ cursor: 'default', padding: '6px 16px' }}
+        role="status"
+        aria-live="polite"
+      >
+        <span className="shimmer-text" style={{ fontSize: 12 }}>
+          Loading…
+        </span>
       </div>
     );
   }
@@ -15,10 +21,14 @@ export default function AuthBadge({ authLoading, isAuthenticated, user }) {
     return (
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
         <motion.img
-          src={user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'U')}&background=10b981&color=000&bold=true`}
+          src={
+            user.photoURL ||
+            `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'U')}&background=10b981&color=000&bold=true`
+          }
           alt={user.displayName || 'User'}
           style={{
-            width: 34, height: 34,
+            width: 34,
+            height: 34,
             borderRadius: '50%',
             border: '2px solid rgba(16,185,129,0.5)',
             boxShadow: '0 0 12px rgba(16,185,129,0.25)',
@@ -43,18 +53,13 @@ export default function AuthBadge({ authLoading, isAuthenticated, user }) {
 
 AuthBadge.propTypes = {
   /** True while Firebase auth state is loading */
-  authLoading:     PropTypes.bool.isRequired,
+  authLoading: PropTypes.bool.isRequired,
   /** True when a user is signed in */
   isAuthenticated: PropTypes.bool.isRequired,
   /** Firebase user object (null when signed out) */
   user: PropTypes.shape({
     displayName: PropTypes.string,
-    photoURL:    PropTypes.string,
-    email:       PropTypes.string,
+    photoURL: PropTypes.string,
+    email: PropTypes.string,
   }),
 };
-
-AuthBadge.defaultProps = {
-  user: null,
-};
-

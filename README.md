@@ -4,7 +4,7 @@
 
 # 🌿 EcoTrack — Carbon Intelligence Platform
 
-### *Track. Analyze. Reduce. Powered by Google Cloud.*
+### _Track. Analyze. Reduce. Powered by Google Cloud._
 
 [![Live Demo](https://img.shields.io/badge/🌍%20Live%20Demo-ecotrack--carbon--platform.web.app-10b981?style=for-the-badge)](https://ecotrack-carbon-platform.web.app)
 [![Cloud Run](https://img.shields.io/badge/☁️%20API-Cloud%20Run-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white)](https://ecotrack-api-957855819260.us-central1.run.app)
@@ -45,6 +45,7 @@
 Carbon emissions from individual lifestyle choices account for **~30% of global greenhouse gas emissions** — yet most people have no idea what their personal footprint looks like or how to reduce it effectively.
 
 EcoTrack targets this gap by providing:
+
 - **Immediate awareness** — Calculate your carbon footprint in under 2 minutes
 - **Contextual benchmarking** — See how you compare to Paris Agreement targets and global averages
 - **Intelligent action** — AI-generated, personalized reduction strategies ranked by impact
@@ -55,18 +56,18 @@ The platform is designed for **individual users**, **sustainability-conscious te
 
 ## ✨ Features
 
-| Feature | Description |
-|---------|-------------|
-| 🌿 **Carbon Calculator** | 4-category monthly survey: transport, diet, home energy, shopping |
-| 📊 **Live Scoring** | Real-time CO₂e estimate updates as you fill in the form |
-| 🏆 **Grade System** | A+ to F grading with colour-coded benchmarks (Paris target, world average) |
-| 🤖 **Vertex AI Insights** | Gemini 1.5 Flash generates personalised, ranked reduction tips |
-| 📅 **30-Day Challenge** | Select and save pledges to Cloud Firestore |
-| 🔐 **Google OAuth** | Secure sign-in via Firebase Authentication |
-| 📈 **BigQuery Analytics** | Cohort-level footprint logging for trend analysis |
-| 🎨 **Premium UI** | Glassmorphism design with Framer Motion animations |
-| 📱 **Responsive** | Mobile-first, works across all screen sizes |
-| ♿ **Accessible** | ARIA roles, skip links, keyboard navigation |
+| Feature                   | Description                                                                |
+| ------------------------- | -------------------------------------------------------------------------- |
+| 🌿 **Carbon Calculator**  | 4-category monthly survey: transport, diet, home energy, shopping          |
+| 📊 **Live Scoring**       | Real-time CO₂e estimate updates as you fill in the form                    |
+| 🏆 **Grade System**       | A+ to F grading with colour-coded benchmarks (Paris target, world average) |
+| 🤖 **Vertex AI Insights** | Gemini 1.5 Flash generates personalised, ranked reduction tips             |
+| 📅 **30-Day Challenge**   | Select and save pledges to Cloud Firestore                                 |
+| 🔐 **Google OAuth**       | Secure sign-in via Firebase Authentication                                 |
+| 📈 **BigQuery Analytics** | Cohort-level footprint logging for trend analysis                          |
+| 🎨 **Premium UI**         | Glassmorphism design with Framer Motion animations                         |
+| 📱 **Responsive**         | Mobile-first, works across all screen sizes                                |
+| ♿ **Accessible**         | ARIA roles, skip links, keyboard navigation                                |
 
 ---
 
@@ -117,6 +118,7 @@ All Vertex AI and BigQuery calls happen **server-side** in Cloud Run. The fronte
 Every external service (Vertex AI, BigQuery, Firestore) has a local fallback. The app works in full demo mode with zero credentials configured.
 
 **3. Separation of concerns**
+
 - `src/` — Pure React frontend, no Node.js APIs
 - `server/` — Pure Express backend, no React code
 - `src/services/` — Thin HTTP clients that call the backend
@@ -130,6 +132,7 @@ Carbon footprint recalculates live as the user types — using React `useMemo` s
 ## 🧠 How the Solution Works
 
 ### Step 1 — Landing & Authentication
+
 ```
 User opens app
   └─► Stunning landing page (hero, features, how-it-works, CTA)
@@ -142,16 +145,17 @@ User opens app
 
 The user fills in a **4-category monthly survey**:
 
-| Category | Inputs | Emission Factor Source |
-|----------|--------|----------------------|
-| 🚗 Transport | km by car, bus, train; flight hours/year | IPCC AR6 transport factors |
-| 🥗 Diet | Diet pattern (vegan → meat-heavy) | Our World in Data food emissions |
-| ⚡ Home Energy | kWh/month + energy source | IEA grid intensity factors |
-| 🛍️ Shopping | Clothing items + electronics/year | Ellen MacArthur Foundation data |
+| Category       | Inputs                                   | Emission Factor Source           |
+| -------------- | ---------------------------------------- | -------------------------------- |
+| 🚗 Transport   | km by car, bus, train; flight hours/year | IPCC AR6 transport factors       |
+| 🥗 Diet        | Diet pattern (vegan → meat-heavy)        | Our World in Data food emissions |
+| ⚡ Home Energy | kWh/month + energy source                | IEA grid intensity factors       |
+| 🛍️ Shopping    | Clothing items + electronics/year        | Ellen MacArthur Foundation data  |
 
 **Live calculation formula (simplified):**
+
 ```js
-total_kg_CO2e = 
+total_kg_CO2e =
   (kmCar × 0.21) +                          // petrol car
   (kmBus × 0.089) +                          // average bus
   (kmTrain × 0.041) +                        // rail
@@ -165,12 +169,14 @@ total_kg_CO2e =
 ### Step 3 — Results & Benchmarking
 
 After calculating, the user sees:
+
 - **Personal score** (kg CO₂e/month) with letter grade A+ → F
 - **Animated breakdown bars** per category
 - **3-way comparison**: You vs Paris Target (167 kg/mo) vs World Average (450 kg/mo)
 - **Annual projection** automatically calculated
 
 **Grading thresholds:**
+
 ```
 A+  ≤ 100 kg   Exceptional
 A   ≤ 167 kg   Paris-aligned
@@ -194,6 +200,7 @@ User selects pledges → saved to Cloud Firestore
 
 **AI Prompt Strategy:**
 The backend sends a structured prompt with the user's exact breakdown values and requests a JSON response with:
+
 - 3 specific, ranked action tips
 - Estimated kg CO₂e saved per tip
 - Priority level (high/medium/low)
@@ -202,6 +209,7 @@ The backend sends a structured prompt with the user's exact breakdown values and
 ### Step 5 — Analytics Pipeline
 
 Every footprint calculation is logged to BigQuery for aggregate analytics:
+
 ```
 User calculates → POST /api/analytics → Cloud Run
                                             └─► BigQuery
@@ -218,36 +226,39 @@ User calculates → POST /api/analytics → Cloud Run
 ## 🛠️ Tech Stack
 
 ### Frontend
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| React | 18.3 | UI framework |
-| Vite | 5.4 | Build tool & dev server |
-| Framer Motion | 12.x | Animations & page transitions |
-| Tabler Icons | 3.x | Icon library |
-| Vanilla CSS | — | Custom glassmorphism design system |
-| Google Fonts | — | Outfit (display) + Inter (body) |
+
+| Technology    | Version | Purpose                            |
+| ------------- | ------- | ---------------------------------- |
+| React         | 18.3    | UI framework                       |
+| Vite          | 5.4     | Build tool & dev server            |
+| Framer Motion | 12.x    | Animations & page transitions      |
+| Tabler Icons  | 3.x     | Icon library                       |
+| Vanilla CSS   | —       | Custom glassmorphism design system |
+| Google Fonts  | —       | Outfit (display) + Inter (body)    |
 
 ### Backend
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| Node.js | 22 (Alpine) | Runtime |
-| Express | 5.x | HTTP server & routing |
-| @google-cloud/vertexai | 1.x | Gemini AI client |
-| @google-cloud/bigquery | 8.x | Analytics logging |
-| dotenv | 17.x | Environment config |
-| cors | 2.x | Cross-origin requests |
+
+| Technology             | Version     | Purpose               |
+| ---------------------- | ----------- | --------------------- |
+| Node.js                | 22 (Alpine) | Runtime               |
+| Express                | 5.x         | HTTP server & routing |
+| @google-cloud/vertexai | 1.x         | Gemini AI client      |
+| @google-cloud/bigquery | 8.x         | Analytics logging     |
+| dotenv                 | 17.x        | Environment config    |
+| cors                   | 2.x         | Cross-origin requests |
 
 ### Google Cloud Services
-| Service | Role |
-|---------|------|
-| **Firebase Hosting** | Frontend CDN + HTTPS |
-| **Firebase Authentication** | Google OAuth 2.0 |
-| **Cloud Firestore** | Footprint & pledge storage |
-| **Cloud Run** | Backend API (containerised, scales to zero) |
-| **Vertex AI (Gemini 1.5 Flash)** | AI insights generation |
-| **Google BigQuery** | Aggregate analytics warehouse |
-| **Cloud Build** | Docker image CI/CD |
-| **Artifact Registry** | Container image storage |
+
+| Service                          | Role                                        |
+| -------------------------------- | ------------------------------------------- |
+| **Firebase Hosting**             | Frontend CDN + HTTPS                        |
+| **Firebase Authentication**      | Google OAuth 2.0                            |
+| **Cloud Firestore**              | Footprint & pledge storage                  |
+| **Cloud Run**                    | Backend API (containerised, scales to zero) |
+| **Vertex AI (Gemini 1.5 Flash)** | AI insights generation                      |
+| **Google BigQuery**              | Aggregate analytics warehouse               |
+| **Cloud Build**                  | Docker image CI/CD                          |
+| **Artifact Registry**            | Container image storage                     |
 
 ---
 
@@ -323,28 +334,33 @@ EcoTrack/
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js 18+ 
+
+- Node.js 18+
 - npm 9+
 - Firebase CLI (`npm install -g firebase-tools`)
 - Google Cloud SDK (optional — for backend)
 
 ### 1. Clone the repository
+
 ```bash
 git clone https://github.com/Afuu-coder/EcoTrack.git
 cd EcoTrack
 ```
 
 ### 2. Install dependencies
+
 ```bash
 npm install
 ```
 
 ### 3. Configure environment
+
 ```bash
 cp .env.example .env.local
 ```
 
 Edit `.env.local` with your values:
+
 ```env
 # Firebase (from Firebase Console → Project Settings)
 VITE_FIREBASE_API_KEY=AIzaSy...
@@ -359,25 +375,30 @@ VITE_CLOUD_RUN_API_URL=https://your-api.run.app
 ```
 
 ### 4. Run frontend (demo mode — no backend needed)
+
 ```bash
 npm run dev
 ```
+
 ➜ Open **http://localhost:5173**
 
 > 💡 The app runs in full demo mode without any credentials — Vertex AI uses a local fallback and Firestore uses in-memory storage.
 
 ### 5. Run backend server
+
 ```bash
 npm run server
 # API available at http://localhost:8080
 ```
 
 ### 6. Run both together
+
 ```bash
 npm run dev:all
 ```
 
 ### 7. Run tests
+
 ```bash
 npm test
 ```
@@ -387,6 +408,7 @@ npm test
 ## 🌐 Deployment
 
 ### Backend → Cloud Run
+
 ```bash
 gcloud run deploy ecotrack-api \
   --source . \
@@ -397,34 +419,36 @@ gcloud run deploy ecotrack-api \
 ```
 
 ### Frontend → Firebase Hosting
+
 ```bash
 npm run build
 firebase deploy --only hosting --project YOUR_PROJECT_ID
 ```
 
 ### Live URLs
-| Service | URL |
-|---------|-----|
-| 🌍 Frontend | https://ecotrack-carbon-platform.web.app |
-| ☁️ Backend API | https://ecotrack-api-957855819260.us-central1.run.app |
+
+| Service             | URL                                                                  |
+| ------------------- | -------------------------------------------------------------------- |
+| 🌍 Frontend         | https://ecotrack-carbon-platform.web.app                             |
+| ☁️ Backend API      | https://ecotrack-api-957855819260.us-central1.run.app                |
 | 📊 Firebase Console | https://console.firebase.google.com/project/ecotrack-carbon-platform |
 
 ---
 
 ## 💡 Assumptions Made
 
-| Assumption | Rationale |
-|-----------|-----------|
-| **Monthly footprint scope** | Monthly is the most relatable time unit for lifestyle tracking — bills, commutes, and diet are all monthly habits |
-| **IPCC emission factors** | Used AR6 2023 values which are the most current internationally accepted factors |
-| **Flight hours as proxy** | Total flight hours/year is simpler to self-report than exact km; 90 kg CO₂e/hour covers an average mix of short/long haul |
-| **Diet as categorical** | People relate to diet patterns (vegan, vegetarian, etc.) more than to grams of specific food consumed |
-| **Grid intensity by source** | Three buckets (coal, mixed, renewable) covers the major real-world cases without requiring users to know their grid intensity factor |
-| **Paris target = 167 kg/month** | 2 tonnes CO₂e/year ÷ 12 — the IPCC 1.5°C compatible per-capita budget |
-| **World average = 450 kg/month** | ~4.5 tonnes/year from Our World in Data 2023 global average |
-| **Anonymous auth as default** | Reduces friction — users can explore before committing to sign in. Anonymous UIDs can later be linked to Google accounts |
-| **Server-side AI calls** | Keeps GCP credentials off the client — critical for security in a production app |
-| **BigQuery fires-and-forgets** | Analytics failures should never block the user experience, so they're non-blocking async calls |
+| Assumption                       | Rationale                                                                                                                            |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| **Monthly footprint scope**      | Monthly is the most relatable time unit for lifestyle tracking — bills, commutes, and diet are all monthly habits                    |
+| **IPCC emission factors**        | Used AR6 2023 values which are the most current internationally accepted factors                                                     |
+| **Flight hours as proxy**        | Total flight hours/year is simpler to self-report than exact km; 90 kg CO₂e/hour covers an average mix of short/long haul            |
+| **Diet as categorical**          | People relate to diet patterns (vegan, vegetarian, etc.) more than to grams of specific food consumed                                |
+| **Grid intensity by source**     | Three buckets (coal, mixed, renewable) covers the major real-world cases without requiring users to know their grid intensity factor |
+| **Paris target = 167 kg/month**  | 2 tonnes CO₂e/year ÷ 12 — the IPCC 1.5°C compatible per-capita budget                                                                |
+| **World average = 450 kg/month** | ~4.5 tonnes/year from Our World in Data 2023 global average                                                                          |
+| **Anonymous auth as default**    | Reduces friction — users can explore before committing to sign in. Anonymous UIDs can later be linked to Google accounts             |
+| **Server-side AI calls**         | Keeps GCP credentials off the client — critical for security in a production app                                                     |
+| **BigQuery fires-and-forgets**   | Analytics failures should never block the user experience, so they're non-blocking async calls                                       |
 
 ---
 
@@ -456,6 +480,6 @@ MIT © 2025 [Afjal Quraishi](https://github.com/Afuu-coder)
 [![React](https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
 [![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev)
 
-*If this project helped you, please ⭐ star the repository!*
+_If this project helped you, please ⭐ star the repository!_
 
 </div>

@@ -19,14 +19,10 @@ dotenv.config({ path: '.env.local', override: true });
 dotenv.config({ override: true });
 
 import express from 'express';
-import cors    from 'cors';
-import path    from 'path';
-import { fileURLToPath } from 'url';
+import cors from 'cors';
 import { getVertexInsights } from './vertex.js';
-import { logAnalytics }      from './bigquery.js';
+import { logAnalytics } from './bigquery.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname  = path.dirname(__filename);
 const PORT = process.env.PORT || 8080;
 
 const app = express();
@@ -55,9 +51,12 @@ function isValidNumber(val, min = 0, max = 100000) {
  * @param {{ userId, total, breakdown }} body
  * @returns {string|null}
  */
-function validateAnalyticsBody({ userId, total, breakdown }) {
+function validateAnalyticsBody({ userId, total, breakdown, cohort }) {
   if (userId !== undefined && (typeof userId !== 'string' || userId.length > 128)) {
     return 'Invalid userId: must be a string under 128 characters';
+  }
+  if (cohort !== undefined && (typeof cohort !== 'string' || cohort.length > 64)) {
+    return 'Invalid cohort: must be a string under 64 characters';
   }
   if (!isValidNumber(total, 0, 50000)) {
     return 'Invalid total: must be a number between 0 and 50,000';
@@ -80,7 +79,7 @@ function validateAnalyticsBody({ userId, total, breakdown }) {
  * @param {{ total, breakdown, inputs }} body
  * @returns {string|null}
  */
-function validateInsightsBody({ total, breakdown, inputs }) {
+function validateInsightsBody({ total, inputs }) {
   if (!isValidNumber(total, 0, 50000)) {
     return 'Invalid total: must be a number between 0 and 50,000';
   }
@@ -128,8 +127,8 @@ app.post('/api/analytics', async (req, res) => {
   }
 
   try {
-    const { userId, total, breakdown } = req.body;
-    await logAnalytics(userId, total, breakdown);
+    const { userId, total, breakdown, cohort } = req.body;
+    await logAnalytics(userId, total, breakdown, cohort);
     res.json({ success: true });
   } catch (err) {
     console.error('[/api/analytics]', err.message);

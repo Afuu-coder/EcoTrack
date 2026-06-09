@@ -10,7 +10,6 @@ import { render, screen, fireEvent, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import ErrorBoundary from './ErrorBoundary';
 
-
 /** Component that throws on render — used to trigger the boundary */
 function BombComponent({ shouldThrow = false }) {
   if (shouldThrow) throw new Error('Test explosion 💥');
@@ -27,7 +26,7 @@ describe('ErrorBoundary — normal operation', () => {
     render(
       <ErrorBoundary>
         <BombComponent shouldThrow={false} />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
     expect(screen.getByText('Safe content')).toBeInTheDocument();
   });
@@ -36,7 +35,7 @@ describe('ErrorBoundary — normal operation', () => {
     render(
       <ErrorBoundary>
         <BombComponent shouldThrow={false} />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
     expect(screen.queryByText(/Something went wrong/i)).not.toBeInTheDocument();
   });
@@ -47,7 +46,7 @@ describe('ErrorBoundary — error caught', () => {
     render(
       <ErrorBoundary>
         <BombComponent shouldThrow={true} />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
     expect(screen.getByText(/Something went wrong/i)).toBeInTheDocument();
   });
@@ -56,7 +55,7 @@ describe('ErrorBoundary — error caught', () => {
     render(
       <ErrorBoundary>
         <BombComponent shouldThrow={true} />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
     expect(screen.getByText(/Try again/i)).toBeInTheDocument();
   });
@@ -65,7 +64,7 @@ describe('ErrorBoundary — error caught', () => {
     render(
       <ErrorBoundary>
         <BombComponent shouldThrow={true} />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
     expect(screen.getByText(/Reload page/i)).toBeInTheDocument();
   });
@@ -74,7 +73,7 @@ describe('ErrorBoundary — error caught', () => {
     render(
       <ErrorBoundary>
         <BombComponent shouldThrow={true} />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
     expect(screen.getByRole('alert')).toBeInTheDocument();
   });
@@ -85,7 +84,7 @@ describe('ErrorBoundary — error caught', () => {
     const { unmount } = render(
       <ErrorBoundary>
         <BombComponent shouldThrow={true} />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
     // We see the error UI
     expect(screen.getByText(/Something went wrong/i)).toBeInTheDocument();
@@ -101,11 +100,10 @@ describe('ErrorBoundary — error caught', () => {
     render(
       <ErrorBoundary>
         <BombComponent shouldThrow={false} />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
     expect(screen.getByText('Safe content')).toBeInTheDocument();
   });
-
 });
 
 describe('ErrorBoundary — custom fallback', () => {
@@ -113,7 +111,7 @@ describe('ErrorBoundary — custom fallback', () => {
     render(
       <ErrorBoundary fallback={<div>Custom error UI</div>}>
         <BombComponent shouldThrow={true} />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
     expect(screen.getByText('Custom error UI')).toBeInTheDocument();
   });
@@ -122,7 +120,7 @@ describe('ErrorBoundary — custom fallback', () => {
     render(
       <ErrorBoundary fallback={<div>Custom error UI</div>}>
         <BombComponent shouldThrow={true} />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
     expect(screen.queryByText(/Something went wrong/i)).not.toBeInTheDocument();
   });
